@@ -6,7 +6,31 @@ Personal machine configuration, version controlled.
 
 ```
 docs/adr/    Architecture Decision Records — why the setup is the way it is
+<tool>/      A stow package. Everything else at the top level is one.
 ```
+
+Inside a package, a file's path is its path relative to `$HOME`, so
+`git/.config/git/ignore` deploys to `~/.config/git/ignore`.
+
+## Deploying
+
+Symlinks are managed by [GNU Stow](https://www.gnu.org/software/stow/)
+(`brew install stow`). Run from the root of this repo — `.stowrc` lives here and supplies
+`--target=~` and `--no-folding`.
+
+```
+stow -n -v git      # dry run: show what would be linked, change nothing
+stow git            # link the git package into ~
+stow -D git         # unlink it
+stow -R git         # relink, to clear symlinks left by deleted files
+```
+
+Stow will not overwrite an existing real file — it reports the conflict and aborts the
+whole package. To bring an existing config under management, move the original aside
+first, then stow and verify before deleting it.
+
+See [0002](docs/adr/0002-deploy-with-gnu-stow.md) for why Stow, and for the tree-folding
+trap `--no-folding` exists to avoid.
 
 ## Decisions
 

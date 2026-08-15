@@ -1,0 +1,9 @@
+# Defaults for stow, read from the current directory — so `cd` here first.
+# See docs/adr/0002-deploy-with-gnu-stow.md for why.
+
+# Stow defaults its target to the PARENT of this repo. It should be $HOME.
+--target=~
+
+# Never fold a directory into a single symlink. Without this, stowing into a
+# home directory that lacks ~/.config symlinks all of ~/.config into this repo.
+--no-folding
