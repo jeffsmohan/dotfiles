@@ -1,0 +1,9 @@
+We build the setup up one decision at a time. Before anything lands, make sure I
+understand the why and the how. Do not run ahead of me.
+
+Write ADRs for new tools or workflows adopted. Make obvious calls yourself; ask for input
+on non-obvious decisions and personal taste. An ADR is `accepted` once you and I agree on
+it; it's just to document our thinking.
+
+Keep the README short: purpose, getting started, principles. Anything discoverable from
+config files or ADRs is clutter.
