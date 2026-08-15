@@ -18,6 +18,7 @@ repos:
     rev: v3.9.6
     hooks:
       - id: prettier
+        language_version: "24.19.0" # Pin an LTS so pre-commit fetches its own node
 
   # TOML formatting
   - repo: https://github.com/ComPWA/taplo-pre-commit
@@ -30,3 +31,9 @@ repos:
     rev: v1.49.0
     hooks:
       - id: typos
+
+  # Credential leak protection
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.30.1
+    hooks:
+      - id: gitleaks

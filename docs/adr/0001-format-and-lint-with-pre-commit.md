@@ -37,9 +37,22 @@ Run formatters through [pre-commit](https://pre-commit.com/), configured in
 (`.github/workflows/lint.yml`) on push and pull request. Tool versions are pinned by git
 revision in the config, so local and CI always run the same versions.
 
-pre-commit installs each tool in its own managed environment — including its own Node for
-prettier. Nothing is added to `$PATH` and the repo stays free of `package.json`,
-`node_modules`, and a lockfile, which matters for a repo that is otherwise dotfiles.
+pre-commit installs each tool in its own managed environment. Nothing is added to `$PATH`
+and the repo stays free of `package.json`, `node_modules`, and a lockfile, which matters
+for a repo that is otherwise dotfiles.
+
+The runtime under a tool is a separate question from the tool's own version, and pinning
+the revision does not settle it. Left alone, pre-commit runs prettier on whatever Node is
+already on the machine — the environment is named `node_env-system` and its `node` is a
+shell shim around the system binary. That makes the hook only as reliable as an unrelated
+Homebrew package: when a `libllhttp` bump left Homebrew's Node unable to start, prettier
+could not run at all, while every other hook was fine. It also quietly breaks the promise
+above, since CI's Node and the laptop's Node are unrelated.
+
+So prettier pins `language_version` to a Node LTS, which makes pre-commit fetch its own
+prebuilt Node instead. Verified by running the hook with no Node on `$PATH`. The cost is a
+one-time download per clone and a second pin to keep current — `pre-commit autoupdate`
+does not bump it, since it is a runtime version rather than a repo revision.
 
 An `.editorconfig` carries the same baseline — line endings, final newline, indent,
 charset, line length — for editors, before any hook runs. It is not enforcement; it is
@@ -83,7 +96,8 @@ the rules that do not overlap mostly argue with the author about how to write.
   the first time, and worse for anything scripted that expects `git commit` to either
   succeed or leave the tree untouched.
 - Bad, because pinned revisions go stale silently. Bumping them is a manual
-  `pre-commit autoupdate`, and nothing prompts it.
+  `pre-commit autoupdate`, and nothing prompts it. Prettier's `language_version` is worse:
+  `autoupdate` does not touch it, so it goes stale with nothing to bump it but noticing.
 - Bad, because pre-commit needs Python and spends time building tool environments on first
   run and after every version bump.
 - Bad, because `typos` will occasionally flag a proper noun or a deliberate misspelling,

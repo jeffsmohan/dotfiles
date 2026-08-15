@@ -8,3 +8,7 @@ it; it's just to document our thinking.
 
 Keep the README short: purpose, getting started, principles. Anything discoverable from
 config files or ADRs is clutter.
+
+`TODOS.md` is a checklist, not a notebook: one line per pending item, no rationale or
+results. Finish an item by deleting it, not by writing down what happened. Report findings
+to me instead.
