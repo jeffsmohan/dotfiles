@@ -1,0 +1,18 @@
+# Baseline for editors, so files are written in the right shape rather than corrected
+# by the hooks afterwards. Deliberately mirrors what .pre-commit-config.yaml enforces —
+# if these two ever disagree, this file is wrong.
+#
+# Prettier reads this as well, but .prettierrc.json takes precedence where they overlap.
+# See docs/adr/0001-format-and-lint-with-pre-commit.md.
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+# Note for Markdown: this strips the two-space hard line break. The
+# trailing-whitespace hook does the same, so the two agree.
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+max_line_length = 90

@@ -7,8 +7,8 @@ date: 2026-08-15
 
 ## Context and Problem Statement
 
-A dotfiles repo is a pile of settings whose reasoning evaporates. The files record
-_what_ is configured; nothing records _why_.
+A dotfiles repo is a pile of settings whose reasoning evaporates. The files record _what_
+is configured; nothing records _why_.
 
 ## Considered Options
 
@@ -32,8 +32,8 @@ Conventions:
 - Filenames are `NNNN-kebab-case-slug.md`, numbers zero-padded to four digits.
 - Status is a field in the frontmatter, not a filesystem operation. Supersede by setting
   `status: superseded by 0007` in the old record and writing a new one. Never delete or
-  rewrite an ADR that was accepted — a decision that was reversed is more informative
-  than one that vanished.
+  rewrite an ADR that was accepted — a decision that was reversed is more informative than
+  one that vanished.
 - Number `0000` is this record, so the directory explains itself to anyone who opens it.
 - No tooling. `cp template.md 0003-some-decision.md` is the entire workflow.
 

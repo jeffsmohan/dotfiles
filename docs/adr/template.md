@@ -7,13 +7,13 @@ date: YYYY-MM-DD
 
 ## Context and Problem Statement
 
-{What is the situation? What forces are in play? Two or three sentences.
-Write it so someone who has never seen this repo can follow the reasoning.}
+{What is the situation? What forces are in play? Two or three sentences. Write it so
+someone who has never seen this repo can follow the reasoning.}
 
 ## Considered Options
 
-* {option 1}
-* {option 2}
+- {option 1}
+- {option 2}
 
 ## Decision
 
@@ -21,9 +21,9 @@ Write it so someone who has never seen this repo can follow the reasoning.}
 
 ## Consequences
 
-* Good, because {benefit}
-* Bad, because {cost — this section is worthless if it only lists upsides}
-* {What would make us revisit this? Name the condition if there is one.}
+- Good, because {benefit}
+- Bad, because {cost — this section is worthless if it only lists upsides}
+- {What would make us revisit this? Name the condition if there is one.}
 
 <!--
 Optional sections, use when they earn their place:
