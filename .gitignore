@@ -1,0 +1,5 @@
+# Machine-local and private values live outside version control.
+local/
+*.local
+
+.DS_Store
