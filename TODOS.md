@@ -24,12 +24,12 @@ commit message. When an item is done, delete it rather than marking it done.
 
 ## Tooling
 
-- Brewfile — so far `stow`, `pre-commit`, `git-lfs`, `gpg`, `tmux`, `--cask ghostty`
+- Brewfile — so far `stow`, `pre-commit`, `git-lfs`, `git-delta`, `gpg`, `tmux`,
+  `--cask ghostty`
 - Nerd Fonts — decide between `font-fira-mono-nerd-font` and `font-hack-nerd-font`, then
   pin in the Brewfile; the Ghostty config depends on one
 - `shellcheck`, `shfmt`, `fish_indent` pre-commit hooks, once shell files exist
 - Codespaces `install.sh` — decide whether it is wanted at all
-- Investigate if https://github.com/dandavison/delta (or similar) is worth using
 
 ## Cleanup
 

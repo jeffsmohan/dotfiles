@@ -11,6 +11,24 @@
 	process = git-lfs filter-process
 	required = true
 
+[core]
+	pager = delta
+
+[interactive]
+	diffFilter = delta --color-only
+
+[delta]
+	navigate = true
+	line-numbers = true
+	hyperlinks = true
+	syntax-theme = gruvbox-dark
+
+[diff]
+	algorithm = histogram
+
+[merge]
+	conflictStyle = zdiff3
+
 # Keep last: later values override earlier ones. Silently skipped if absent.
 [include]
 	path = ~/.config/git/config.local
