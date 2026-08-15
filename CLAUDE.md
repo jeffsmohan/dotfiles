@@ -1,5 +1,6 @@
 We build the setup up one decision at a time. Before anything lands, make sure I
-understand the why and the how. Do not run ahead of me.
+understand the why and the how. Do not run ahead of me. (Ok to parallelize via worktrees,
+but always confirm with me before we land work.)
 
 Write ADRs for new tools or workflows adopted. Make obvious calls yourself; ask for input
 on non-obvious decisions and personal taste. An ADR is `accepted` once you and I agree on
