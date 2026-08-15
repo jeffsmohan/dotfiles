@@ -1,0 +1,16 @@
+# No email address here on purpose — this repo is public, and an address is a property of
+# the machine or repo. Set it in ~/.config/git/config.local, along with anything else
+# specific to the machine.
+
+[user]
+	name = Jeff Mohan
+
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+
+# Keep last: later values override earlier ones. Silently skipped if absent.
+[include]
+	path = ~/.config/git/config.local

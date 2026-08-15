@@ -13,6 +13,13 @@ stow -n -v <package>   # dry run first — it will refuse to clobber existing fi
 stow <package>
 ```
 
+Then set the values this repo deliberately does not carry. Once per machine, after stowing
+`git`:
+
+```
+git config --file ~/.config/git/config.local user.email <address>
+```
+
 ## Principles
 
 **Every top-level directory is a [stow](https://www.gnu.org/software/stow/) package**, and
@@ -27,9 +34,14 @@ what would justify changing course. Start at
 [0000](docs/adr/0000-record-architecture-decisions.md). Read the relevant record before
 changing something; add one when the reasoning would otherwise be lost.
 
-**This repo is public.** `local/` and `*.local` are gitignored. Credentials, work-specific
-settings, and per-machine paths live there and are sourced by tracked files if present —
-never committed.
+**Preferences, not context.** These are the settings that should follow me to every
+machine, work or personal. Anything that belongs to one employer, one project, or one
+laptop — an email address, a credential, a path that only exists here — is layered on
+locally on that machine and does not live in this repo.
+
+**This repo is public.** That layering is what keeps it safe to be: tracked files pull in
+a machine-local counterpart if one exists and carry on without it if not, so nothing
+private ever has to be committed to make the setup work.
 
 **Formatting has one authority.** Editors, agents, and hand edits all disagree; pre-commit
 settles it on the way in.
