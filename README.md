@@ -30,10 +30,10 @@ taking all of them. The exceptions are [`docs/`](docs/) and [`keyboard/`](keyboa
 which deploy nothing and are not packages.
 
 **Anything non-obvious gets an ADR.** The files record _what_ is configured and
-[`docs/adr/`](docs/adr/) records _why_ — including the options that were rejected, and
-what would justify changing course. Start at
-[0000](docs/adr/0000-record-architecture-decisions.md). Read the relevant record before
-changing something; add one when the reasoning would otherwise be lost.
+[`docs/adr/`](docs/adr/) records _why_ — including the options that were rejected and what
+would justify revisiting. They are short on purpose; `template.md` carries the budgets.
+Start at [0000](docs/adr/0000-record-architecture-decisions.md). Read the relevant record
+before changing something; add one when the reasoning would otherwise be lost.
 
 **Preferences, not context.** These are the settings that should follow me to every
 machine, work or personal. Anything that belongs to one employer, one project, or one

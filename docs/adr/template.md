@@ -3,35 +3,34 @@ status: proposed
 date: YYYY-MM-DD
 ---
 
-# {Short title: the problem and the chosen solution}
+# {The problem and the chosen solution, in under ten words}
 
 ## Context and Problem Statement
 
-{What is the situation? What forces are in play? Two or three sentences. Write it so
-someone who has never seen this repo can follow the reasoning.}
+{Why this needs deciding, in three sentences. Not the history of what we tried before —
+only the situation that forces a choice now.}
 
 ## Considered Options
 
-- {option 1}
-- {option 2}
+- {Only what was genuinely weighed. Bare names, no commentary. Two is a fine number; five
+  with four obvious losers is padding.}
 
 ## Decision
 
-{The choice, stated plainly, and why it beat the alternatives.}
+{The choice, then why it beat the alternatives. 150 words.
 
-## Consequences
+One sentence per rejected option. A genuine near-miss may have a short paragraph — one
+option, not all of them.
 
-- Good, because {benefit}
-- Bad, because {cost — this section is worthless if it only lists upsides}
-- {What would make us revisit this? Name the condition if there is one.}
+Cut anything a reader could rediscover in a minute: command syntax, install steps, config
+values already in the tracked file, anything the tool's own docs cover.}
 
 <!--
-Optional sections, use when they earn their place:
-
-## Pros and Cons of the Options
-Per-option detail, when the tradeoff is close enough that the reasoning
-would otherwise be lost.
+Optional, only when it earns its place:
 
 ## More Information
-Links, related ADRs, follow-up work.
+Deferred decisions, revisit conditions, related ADRs.
+
+Aim for the length of 0006. If a record runs past 400 words, the extra words should be
+carrying a decision, not explaining one.
 -->
