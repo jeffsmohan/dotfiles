@@ -8,7 +8,6 @@ commit message. When an item is done, delete it rather than marking it done.
 
 - Commit signing: GPG vs SSH signing, and how private keys reach a new machine
 - `bootstrap.sh`: what it does, and how much it is allowed to assume
-- Brewfile: curated by hand vs `brew bundle dump`, pinned vs not
 - fish as the login shell
 - QMK firmware in its own repo
 - The local-overlay pattern itself, if it outgrows the README paragraph
@@ -24,10 +23,6 @@ commit message. When an item is done, delete it rather than marking it done.
 
 ## Tooling
 
-- Brewfile — so far `stow`, `pre-commit`, `git-lfs`, `git-delta`, `gpg`, `tmux`,
-  `--cask ghostty`
-- Nerd Fonts — decide between `font-fira-mono-nerd-font` and `font-hack-nerd-font`, then
-  pin in the Brewfile; the Ghostty config depends on one
 - `shellcheck`, `shfmt`, `fish_indent` pre-commit hooks, once shell files exist
 - Codespaces `install.sh` — decide whether it is wanted at all
 

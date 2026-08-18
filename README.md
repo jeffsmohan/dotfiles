@@ -43,5 +43,8 @@ locally on that machine and does not live in this repo.
 a machine-local counterpart if one exists and carry on without it if not, so nothing
 private ever has to be committed to make the setup work.
 
+**The `Brewfile` installs this repo's dependencies, not the machine's.** It lists only
+what tracked config here needs. Whatever else you install with `brew` is untouched.
+
 **Formatting has one authority.** Editors, agents, and hand edits all disagree; pre-commit
 settles it on the way in.
