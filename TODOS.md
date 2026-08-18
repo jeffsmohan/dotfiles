@@ -9,7 +9,6 @@ commit message. When an item is done, delete it rather than marking it done.
 - Commit signing: GPG vs SSH signing, and how private keys reach a new machine
 - `bootstrap.sh`: what it does, and how much it is allowed to assume
 - fish as the login shell
-- QMK firmware in its own repo
 - The local-overlay pattern itself, if it outgrows the README paragraph
 
 ## Packages to add

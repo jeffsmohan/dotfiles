@@ -26,7 +26,8 @@ git config --file ~/.config/git/config.local user.email <address>
 a file's path inside a package is its path relative to `$HOME`. So
 `git/.config/git/ignore` deploys to `~/.config/git/ignore`, and the layout of this repo is
 the documentation for where things go. Deploy packages one at a time; nothing requires
-taking all of them.
+taking all of them. The exceptions are [`docs/`](docs/) and [`keyboard/`](keyboard/),
+which deploy nothing and are not packages.
 
 **Anything non-obvious gets an ADR.** The files record _what_ is configured and
 [`docs/adr/`](docs/adr/) records _why_ — including the options that were rejected, and
