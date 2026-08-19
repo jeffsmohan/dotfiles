@@ -30,7 +30,6 @@ commit message. When an item is done, delete it rather than marking it done.
 
 ## Cleanup
 
-- Remove Hammerspoon
 - Uninstall iTerm2 once Ghostty has proven itself over a few weeks
 - Rip out oh-my-fish, vestigial alongside fisher?
 - Delete the empty `fish_variables*` and `fishd.tmp.*` files in `~/.config/fish`
