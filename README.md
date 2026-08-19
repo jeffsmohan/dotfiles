@@ -5,12 +5,13 @@ Personal machine configuration, version controlled.
 ## Getting started
 
 ```
-git clone git@github.com:jeffsmohan/dotfiles.git
+git clone https://github.com/jeffsmohan/dotfiles.git
 cd dotfiles
 ./bootstrap.sh
 ```
 
-Re-run it after a `git pull` to apply changes.
+Over HTTPS, because SSH needs a key that does not exist yet. Re-run `bootstrap.sh` after a
+`git pull` to apply changes.
 
 Then set the values this repo deliberately does not carry. Once per machine:
 
@@ -18,20 +19,33 @@ Then set the values this repo deliberately does not carry. Once per machine:
 git config --file ~/.config/git/config.local user.email <address>
 ```
 
-Commits are signed with a key that never leaves the machine, so one has to be made on it.
-In [Secretive](https://github.com/maxgoedjen/secretive), create a key named `git` with
+One key per machine handles both jobs GitHub needs: signing commits and authenticating
+over SSH. It never leaves the machine, so it has to be made there. In
+[Secretive](https://github.com/maxgoedjen/secretive), create a key named `git` with
 **Authentication not required when Mac unlocked**. The name becomes the key comment, which
 is how the commands below pick it out once Secretive holds more than one key. Run them
 from a new shell, where `SSH_AUTH_SOCK` points at the Secretive agent:
 
 ```
-gh auth refresh -h github.com -s admin:ssh_signing_key
+gh auth login
+gh auth refresh -h github.com -s admin:ssh_signing_key -s admin:public_key
 ssh-add -L | grep git@secretive > ~/.ssh/id_secretive_git.pub
 gh ssh-key add --type signing ~/.ssh/id_secretive_git.pub
+gh ssh-key add --type authentication ~/.ssh/id_secretive_git.pub
 git config --file ~/.config/git/config.local user.signingkey ~/.ssh/id_secretive_git.pub
 ```
 
-Do this before committing from the machine, not after: unsigned commits are marked
+GitHub keeps signing and authentication keys in separate lists and consults each only for
+its own purpose, so the same key is registered twice: once to verify commits, once to push
+them.
+
+With a key that can authenticate, the clone can move off HTTPS:
+
+```
+git remote set-url origin git@github.com:jeffsmohan/dotfiles.git
+```
+
+Do all of this before committing from the machine, not after: unsigned commits are marked
 `Unverified` on GitHub.
 
 ## Principles
