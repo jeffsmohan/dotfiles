@@ -10,7 +10,6 @@
       "Bash(brew install:*)",
       "Bash(brew uninstall:*)",
       "Bash(rm:*)"
-    ],
-    "allow": ["Bash(stow -n:*)"]
+    ]
   }
 }
