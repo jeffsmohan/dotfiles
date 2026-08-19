@@ -19,14 +19,16 @@ git config --file ~/.config/git/config.local user.email <address>
 ```
 
 Commits are signed with a key that never leaves the machine, so one has to be made on it.
-In [Secretive](https://github.com/maxgoedjen/secretive), create a key with
-**Authentication not required when Mac unlocked**. Then, from a new shell:
+In [Secretive](https://github.com/maxgoedjen/secretive), create a key named `git` with
+**Authentication not required when Mac unlocked**. The name becomes the key comment, which
+is how the commands below pick it out once Secretive holds more than one key. Run them
+from a new shell, where `SSH_AUTH_SOCK` points at the Secretive agent:
 
 ```
 gh auth refresh -h github.com -s admin:ssh_signing_key
-ssh-add -L > ~/.ssh/id_secretive.pub
-gh ssh-key add --type signing ~/.ssh/id_secretive.pub
-git config --file ~/.config/git/config.local user.signingkey ~/.ssh/id_secretive.pub
+ssh-add -L | grep git@secretive > ~/.ssh/id_secretive_git.pub
+gh ssh-key add --type signing ~/.ssh/id_secretive_git.pub
+git config --file ~/.config/git/config.local user.signingkey ~/.ssh/id_secretive_git.pub
 ```
 
 Do this before committing from the machine, not after: unsigned commits are marked
