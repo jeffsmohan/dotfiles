@@ -18,6 +18,20 @@ Then set the values this repo deliberately does not carry. Once per machine:
 git config --file ~/.config/git/config.local user.email <address>
 ```
 
+Commits are signed with a key that never leaves the machine, so one has to be made on it.
+In [Secretive](https://github.com/maxgoedjen/secretive), create a key with
+**Authentication not required when Mac unlocked**. Then, from a new shell:
+
+```
+gh auth refresh -h github.com -s admin:ssh_signing_key
+ssh-add -L > ~/.ssh/id_secretive.pub
+gh ssh-key add --type signing ~/.ssh/id_secretive.pub
+git config --file ~/.config/git/config.local user.signingkey ~/.ssh/id_secretive.pub
+```
+
+Do this before committing from the machine, not after: unsigned commits are marked
+`Unverified` on GitHub.
+
 ## Principles
 
 **Every top-level directory is a [stow](https://www.gnu.org/software/stow/) package**, and

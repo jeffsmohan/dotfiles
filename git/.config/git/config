@@ -5,6 +5,12 @@
 [user]
 	name = Jeff Mohan
 
+[commit]
+	gpgsign = true
+
+[gpg]
+	format = ssh
+
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f

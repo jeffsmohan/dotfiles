@@ -6,7 +6,6 @@ commit message. When an item is done, delete it rather than marking it done.
 
 ## Decisions owed an ADR
 
-- Commit signing: GPG vs SSH signing, and how private keys reach a new machine
 - fish as the login shell
 - The local-overlay pattern itself, if it outgrows the README paragraph
 
@@ -18,11 +17,14 @@ commit message. When an item is done, delete it rather than marking it done.
 - **tmux** — `~/.config/tmux/tmux.conf` is live and untracked; Ghostty depends on its
   `extended-keys` block
 - **workmux** — decide whether any of it belongs here
+- **ssh** — split authentication off Secretive's agent with `IdentityAgent`, once
+  `~/.ssh/config` is tracked
 
 ## Tooling
 
 - `fish_indent` pre-commit hook, once fish files exist
-- Guided walkthrough that sets up the local overlay
+- Guided walkthrough that sets up the local overlay: prompt for `user.email`, walk through
+  creating the Secretive key, register it with `gh`, set `user.signingkey`
 - Codespaces `install.sh` — decide whether it is wanted at all
 
 ## Cleanup
@@ -32,3 +34,6 @@ commit message. When an item is done, delete it rather than marking it done.
 - Rip out oh-my-fish, vestigial alongside fisher?
 - Delete the empty `fish_variables*` and `fishd.tmp.*` files in `~/.config/fish`
 - `~/.config/git/config.local` is mode 644; decide whether that matters
+- Retire `~/.ssh/id_ed25519` for an Enclave auth key: register the new one everywhere it
+  is trusted, then delete the file
+- Uninstall GPG Suite once ADR 0008 is applied

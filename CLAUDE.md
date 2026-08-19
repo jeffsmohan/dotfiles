@@ -2,8 +2,10 @@ We build the setup up one decision at a time. Before anything lands, make sure I
 understand the why and the how. Do not run ahead of me. (Ok to parallelize via worktrees,
 but always confirm with me before we land work.)
 
-This repo is public. No credentials, API keys, email addresses of any kind. Anything
-machine-specific or private goes to the gitignored local overlay, never a tracked file.
+This repo is public. Never commit credentials or API keys — that one is a security
+incident. Email addresses, paths, and anything else machine-specific stay out of tracked
+files too, but as a portability bug rather than a leak: they are context, not preference,
+and would be wrong on the next machine. Both belong in the gitignored local overlay.
 
 Write ADRs for new tools or workflows adopted. Make obvious calls yourself; ask for input
 on non-obvious decisions and personal taste. An ADR is `accepted` once you and I agree on
