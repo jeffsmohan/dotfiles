@@ -7,14 +7,12 @@ Personal machine configuration, version controlled.
 ```
 git clone git@github.com:jeffsmohan/dotfiles.git
 cd dotfiles
-brew install stow
-pre-commit install     # git hooks are not version controlled; re-run per clone
-stow -n -v <package>   # dry run first — it will refuse to clobber existing files
-stow <package>
+./bootstrap.sh
 ```
 
-Then set the values this repo deliberately does not carry. Once per machine, after stowing
-`git`:
+Re-run it after a `git pull` to apply changes.
+
+Then set the values this repo deliberately does not carry. Once per machine:
 
 ```
 git config --file ~/.config/git/config.local user.email <address>
@@ -25,9 +23,8 @@ git config --file ~/.config/git/config.local user.email <address>
 **Every top-level directory is a [stow](https://www.gnu.org/software/stow/) package**, and
 a file's path inside a package is its path relative to `$HOME`. So
 `git/.config/git/ignore` deploys to `~/.config/git/ignore`, and the layout of this repo is
-the documentation for where things go. Deploy packages one at a time; nothing requires
-taking all of them. The exceptions are [`docs/`](docs/) and [`keyboard/`](keyboard/),
-which deploy nothing and are not packages.
+the documentation for where things go. `bootstrap.sh` deploys all of them;
+`stow <package>` deploys one.
 
 **Anything non-obvious gets an ADR.** The files record _what_ is configured and
 [`docs/adr/`](docs/adr/) records _why_ — including the options that were rejected and what
