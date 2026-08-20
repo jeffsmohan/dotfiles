@@ -17,8 +17,6 @@ commit message. When an item is done, delete it rather than marking it done.
 - **tmux** — `~/.config/tmux/tmux.conf` is live and untracked; Ghostty depends on its
   `extended-keys` block
 - **workmux** — decide whether any of it belongs here
-- **ssh** — track `~/.ssh/config`; drop the `IdentityFile` and `AddKeysToAgent` lines left
-  over from `id_ed25519`
 
 ## Tooling
 
