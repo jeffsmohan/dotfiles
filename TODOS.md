@@ -29,6 +29,3 @@ commit message. When an item is done, delete it rather than marking it done.
 - Codespaces `install.sh` — decide whether it is wanted at all
 
 ## Cleanup
-
-- Rip out oh-my-fish, vestigial alongside fisher?
-- Delete the empty `fish_variables*` and `fishd.tmp.*` files in `~/.config/fish`
