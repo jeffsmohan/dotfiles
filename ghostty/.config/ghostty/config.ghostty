@@ -13,3 +13,8 @@ window-inherit-font-size = false
 keybind = super+t=unbind
 keybind = super+d=unbind
 keybind = super+shift+d=unbind
+
+# send Ctrl+Shift+Arrow (Mac tab-switching, also built as keyboard chords) through as
+# special escape sequences that tmux.conf binds to window-switching
+keybind = super+alt+arrow_right=csi:1;6C
+keybind = super+alt+arrow_left=csi:1;6D
