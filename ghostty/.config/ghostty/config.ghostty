@@ -1,20 +1,21 @@
-# Ghostty configuration. See docs/adr/0003-use-ghostty-as-the-terminal-emulator.md
-
 # Display
 theme = Gruvbox Dark Hard
 minimum-contrast = 1.1
 font-family = "FiraMono Nerd Font Mono"
 font-size = 12
 
+# ghostty is just hosting tmux, which already has its own status bar
+# (loses ability to drag the window, but I just use keyboard shortcuts for that)
+macos-titlebar-style = hidden
+
 # Behavior
 window-inherit-font-size = false
-
-# tmux used for window and pane management; unbind native ghostty tab/pane commands
-keybind = super+t=unbind
-keybind = super+d=unbind
-keybind = super+shift+d=unbind
+macos-option-as-alt = true
 
 # send Ctrl+Shift+Arrow (Mac tab-switching, also built as keyboard chords) through as
 # special escape sequences that tmux.conf binds to window-switching
 keybind = super+alt+arrow_right=csi:1;6C
 keybind = super+alt+arrow_left=csi:1;6D
+
+# machine-local overrides
+config-file = ?~/.config/ghostty/config.ghostty.local

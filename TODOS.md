@@ -12,8 +12,6 @@ commit message. When an item is done, delete it rather than marking it done.
 ## Packages to add
 
 - **fish** — scrub secrets (API keys, work emails, internal URLs) into the overlay first
-- **ghostty** — decide whether to pin `macos-option-as-alt`, and whether to bind
-  `super+e=esc:e` rather than leave Cmd+E emergent
 - **workmux** — decide whether any of it belongs here
 - **claude** — global settings, `CLAUDE.md`, the statusline script, and the skills I
   wrote; leave the marketplace-installed ones out, and get the absolute path out of
