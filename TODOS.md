@@ -12,10 +12,9 @@ commit message. When an item is done, delete it rather than marking it done.
 ## Packages to add
 
 - **fish** — scrub secrets (API keys, work emails, internal URLs) into the overlay first
-- **workmux** — decide whether any of it belongs here
-- **claude** — global settings, `CLAUDE.md`, the statusline script, and the skills I
-  wrote; leave the marketplace-installed ones out, and get the absolute path out of
-  `statusLine`
+- **workmux** — decide whether any of it belongs here, including the skills it installs
+  into `~/.claude/skills`
+- **agents** — track the `~/.agents` skill inventory, and prune the ones I no longer use
 
 ## Tooling
 

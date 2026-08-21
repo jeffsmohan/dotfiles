@@ -3,6 +3,7 @@
 brew "gh"
 brew "git-delta"
 brew "git-lfs"
+brew "jq"
 brew "pre-commit"
 brew "starship"
 brew "stow"
