@@ -1,0 +1,4 @@
+# Known "spellings" that the pre-commit typos hook should leave alone
+
+[default.extend-words]
+gam = "gam" # git amend fish abbreviation

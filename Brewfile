@@ -1,5 +1,6 @@
 # Dependencies of this repo (not an inventory of the machine)
 
+brew "fish"
 brew "fnm"
 brew "gh"
 brew "git-delta"

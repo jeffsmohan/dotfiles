@@ -48,6 +48,29 @@ install_homebrew() {
   /bin/bash -c "$(curl -fsSL "$homebrew_installer")"
 }
 
+# Set up login shell (fish) in /etc/shells and chsh to use it by default.
+set_login_shell() {
+  local name="$1" path current
+
+  path="$(command -v "$name" || true)"
+  [[ -n "$path" ]] || die "$name is not on PATH after brew bundle."
+
+  if grep -qxF "$path" /etc/shells; then
+    echo "$path already in /etc/shells"
+  else
+    echo "Adding $path to /etc/shells (sudo)"
+    printf '%s\n' "$path" | sudo tee -a /etc/shells >/dev/null
+  fi
+
+  current="$(dscl . -read "/Users/$USER" UserShell | awk '{print $2}')"
+  if [[ "$current" == "$path" ]]; then
+    echo "Login shell already $path"
+  else
+    echo "Changing login shell from $current to $path (sudo)"
+    sudo chsh -s "$path" "$USER"
+  fi
+}
+
 # === Bootstrap steps ===
 
 say "Homebrew"
@@ -59,6 +82,9 @@ brew --version
 
 say "Dependencies"
 brew bundle --file=Brewfile
+
+say "Login shell"
+set_login_shell fish
 
 # Top-level directories are assumed to be stow packages:
 # - dot-directories excluded via `*/` glob

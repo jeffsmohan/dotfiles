@@ -6,12 +6,10 @@ commit message. When an item is done, delete it rather than marking it done.
 
 ## Decisions owed an ADR
 
-- fish as the login shell
 - The local-overlay pattern itself, if it outgrows the README paragraph
 
 ## Packages to add
 
-- **fish** — scrub secrets (API keys, work emails, internal URLs) into the overlay first
 - **workmux** — decide whether any of it belongs here, including the skills it installs
   into `~/.claude/skills`
 - **agents** — track the `~/.agents` skill inventory, and prune the ones I no longer use
@@ -27,8 +25,6 @@ commit message. When an item is done, delete it rather than marking it done.
 - Add a lock-screen key to the keyboard layout
 - Investigate `delta` display configuration options
 - Investigate Nerd Font glyphs for more git statuses in the prompt line
-
-## Cleanup
-
-- Stale comment in the untracked `~/.config/fish/config.fish` still credits Tide for the
-  vi mode indicator
+- Evaluate direnv for per-repo environments, replacing the machine-wide credential exports
+  in the fish overlay
+- Re-evaluate Gruvbox Dark Hard as the palette across Ghostty, starship, and fish
