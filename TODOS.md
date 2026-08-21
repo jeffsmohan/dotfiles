@@ -16,7 +16,6 @@ commit message. When an item is done, delete it rather than marking it done.
 
 ## Tooling
 
-- Script of `defaults write` calls for key repeat and the Dock, run by `bootstrap.sh`
 - Track `formula/tmux@3.6b.rb` and teach `bootstrap.sh` to build the pinned tmux from it,
   per ADR 0010
 - Script that automates per-machine setup, rather than the README list of manual steps:

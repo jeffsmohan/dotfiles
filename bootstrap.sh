@@ -109,5 +109,9 @@ fi
 say "Git hooks"
 pre-commit install
 
+if [[ "$(uname -s)" == "Darwin" ]]; then
+  ./bootstrap-macos.sh
+fi
+
 say "Done"
 echo "Set the values this repo deliberately does not carry — see README.md."
