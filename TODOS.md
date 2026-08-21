@@ -30,3 +30,7 @@ commit message. When an item is done, delete it rather than marking it done.
   `user.signingkey`
 
 ## Cleanup
+
+- Remove fisher, once `nvm.fish` is replaced or dropped
+- Stale comment in the untracked `~/.config/fish/config.fish` still credits Tide for the
+  vi mode indicator
