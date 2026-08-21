@@ -37,6 +37,15 @@ repos:
     hooks:
       - id: shfmt
 
+  # fish_indent ships with fish itself rather than as a pre-commit repo
+  - repo: local
+    hooks:
+      - id: fish-indent
+        name: fish_indent
+        entry: fish_indent --write
+        language: system
+        types: [fish]
+
   # Catch common typos
   - repo: https://github.com/crate-ci/typos
     rev: v1.49.0

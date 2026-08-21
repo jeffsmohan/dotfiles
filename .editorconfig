@@ -16,3 +16,7 @@ trim_trailing_whitespace = true
 indent_style = space
 indent_size = 2
 max_line_length = 90
+
+# fish_indent has a fixed 4-space opinion
+[*.fish]
+indent_size = 4
