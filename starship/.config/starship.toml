@@ -35,6 +35,10 @@ format = '[  $branch(:$remote_branch)](bg:dark2 fg:bright_green)'
 [git_commit]
 format = '[ $hash$tag](bg:dark2 fg:light4)'
 tag_symbol = '  '
+tag_disabled = false
+
+[git_state]
+format = '[ \($state( $progress_current/$progress_total)\)](bg:dark2 fg:bright_red)'
 
 # Parenthesised because git_status stays "present" with empty content on a clean tree
 [git_status]
