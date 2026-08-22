@@ -1,29 +1,29 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
-  "autoMemoryEnabled": false,
-  "awaySummaryEnabled": false,
-  "disableArtifact": true,
+  "permissions": {
+    "deny": ["EnterPlanMode", "ExitPlanMode", "AskUserQuestion"],
+    "defaultMode": "auto"
+  },
+  "model": "opus[1m]",
   "disableBundledSkills": true,
-  "disableRemoteControl": true,
-  "disableWorkflows": true,
   "hooks": {
     "Notification": [
       {
+        "matcher": "permission_prompt|elicitation_dialog",
         "hooks": [
           {
-            "command": "workmux set-window-status waiting",
-            "type": "command"
+            "type": "command",
+            "command": "workmux set-window-status waiting"
           }
-        ],
-        "matcher": "permission_prompt|elicitation_dialog"
+        ]
       }
     ],
     "PostToolUse": [
       {
         "hooks": [
           {
-            "command": "workmux set-window-status working",
-            "type": "command"
+            "type": "command",
+            "command": "workmux set-window-status working"
           }
         ]
       }
@@ -32,8 +32,8 @@
       {
         "hooks": [
           {
-            "command": "workmux set-window-status done",
-            "type": "command"
+            "type": "command",
+            "command": "workmux set-window-status done"
           }
         ]
       }
@@ -42,24 +42,26 @@
       {
         "hooks": [
           {
-            "command": "workmux set-window-status working",
-            "type": "command"
+            "type": "command",
+            "command": "workmux set-window-status working"
           }
         ]
       }
     ]
   },
-  "model": "opus[1m]",
-  "permissions": {
-    "deny": ["EnterPlanMode", "ExitPlanMode", "AskUserQuestion"],
-    "defaultMode": "auto"
-  },
-  "skipAutoPermissionPrompt": true,
+  "disableRemoteControl": true,
+  "disableWorkflows": true,
+  "disableArtifact": true,
   "statusLine": {
-    "command": "~/.claude/statusline-command.sh",
-    "type": "command"
+    "type": "command",
+    "command": "~/.claude/statusline-command.sh"
   },
-  "theme": "dark",
+  "awaySummaryEnabled": false,
   "tui": "default",
+  "autoMemoryEnabled": false,
+  "theme": "dark",
+  "editorMode": "vim",
+  "autoCompactEnabled": true,
+  "skipAutoPermissionPrompt": true,
   "voiceEnabled": false
 }
