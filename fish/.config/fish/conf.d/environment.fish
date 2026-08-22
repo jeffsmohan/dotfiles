@@ -1,5 +1,5 @@
 # Standard environment variables that no single tool owns
-set -gx EDITOR vim
+set -gx EDITOR nvim
 set -gx VISUAL $EDITOR
 set -gx LANG en_US.UTF-8
 

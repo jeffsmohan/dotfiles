@@ -37,6 +37,12 @@ repos:
     hooks:
       - id: shfmt
 
+  # Lua formatting
+  - repo: https://github.com/JohnnyMorganz/StyLua
+    rev: v2.5.2
+    hooks:
+      - id: stylua
+
   # fish_indent ships with fish itself rather than as a pre-commit repo
   - repo: local
     hooks:
@@ -51,6 +57,9 @@ repos:
     rev: v1.49.0
     hooks:
       - id: typos
+        # The hook ships --write-changes, which silently rewrites a word whenever the
+        # correction is unambiguous. Report and fail instead; corrections are mine to make.
+        args: [--force-exclude]
 
   # Credential leak protection
   - repo: https://github.com/gitleaks/gitleaks

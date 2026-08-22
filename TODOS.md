@@ -22,5 +22,5 @@ commit message. When an item is done, delete it rather than marking it done.
 - Decide whether to own and customise the skills `workmux setup` installs into
   `~/.claude/skills`, per the open question in ADR 0017
 - Investigate `delta` display configuration options
-- Re-evaluate Gruvbox Dark Hard as the palette across Ghostty, starship, fish, and the
-  workmux dashboard
+- Re-evaluate Gruvbox Dark Hard as the palette across Ghostty, starship, fish, the workmux
+  dashboard, and neovim

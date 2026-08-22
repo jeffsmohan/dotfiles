@@ -1,4 +1,9 @@
 # Known "spellings" that the pre-commit typos hook should leave alone
 
+[default]
+# kickstart marks the mnemonic letter in which-key descriptions — "[S]earch [F]iles" —
+# which splits the word, so typos reads "earch". Skip the whole marked word.
+extend-ignore-re = ['\[[A-Za-z]\][A-Za-z]*']
+
 [default.extend-words]
 gam = "gam" # git amend fish abbreviation
