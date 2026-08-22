@@ -22,6 +22,4 @@ commit message. When an item is done, delete it rather than marking it done.
   prompt for `user.email`, guide creating the Secretive key, register it with `gh`, set
   `user.signingkey`
 - Investigate `delta` display configuration options
-- Evaluate direnv for per-repo environments, replacing the machine-wide credential exports
-  in the fish overlay
 - Re-evaluate Gruvbox Dark Hard as the palette across Ghostty, starship, and fish
