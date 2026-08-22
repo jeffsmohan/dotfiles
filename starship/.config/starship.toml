@@ -41,6 +41,9 @@ tag_disabled = false
 format = '[ \($state( $progress_current/$progress_total)\)](bg:dark2 fg:bright_red)'
 
 # Parenthesised because git_status stays "present" with empty content on a clean tree
+#
+# Glyphs here must stay out of U+F500-U+F6FF: fish reserves that range internally, measures
+# anything in it as 3 columns, and leaves the cursor stranded that far past the prompt.
 [git_status]
 format = '([ $all_status$ahead_behind](bg:dark2 fg:bright_yellow))'
 
@@ -48,7 +51,7 @@ conflicted = "\uF40C$count"                        # oct-alert_fill
 ahead = "\uF431$count"                             # oct-arrow_up
 behind = "\uF433$count"                            # oct-arrow_down
 diverged = "\uF431$ahead_count\uF433$behind_count" # up and down arrows
-untracked = "\uF51B$count"                         # oct-sparkle_fill
+untracked = "\U000F04CE$count"                     # md-star
 stashed = "\U000F0193$count"                       # md-content_save (floppy disk)
 modified = "\uF040$count"                          # fa-pencil
 staged = "+$count"
