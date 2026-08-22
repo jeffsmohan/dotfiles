@@ -21,7 +21,6 @@ commit message. When an item is done, delete it rather than marking it done.
 - Script that automates per-machine setup, rather than the README list of manual steps:
   prompt for `user.email`, guide creating the Secretive key, register it with `gh`, set
   `user.signingkey`
-- Add a lock-screen key to the keyboard layout
 - Investigate `delta` display configuration options
 - Investigate Nerd Font glyphs for more git statuses in the prompt line
 - Evaluate direnv for per-repo environments, replacing the machine-wide credential exports
