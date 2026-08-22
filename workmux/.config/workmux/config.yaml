@@ -1,0 +1,18 @@
+# Global workmux defaults. A repo's own .workmux.yaml overrides these.
+
+# Behavior
+agent: claude
+mode: window # A session is a repo, a window is a worktree, panes are roles within it
+worktree_dir: ~/code/.worktrees/{project}
+base_branch: auto # Branch from repo's main branch instead of current branch
+merge_strategy: rebase
+panes: # Left pane agent; right pane shell
+  - command: <agent>
+    focus: true
+  - split: horizontal
+
+# Display
+nerdfont: true
+theme:
+  scheme: glacier-signal
+  mode: dark

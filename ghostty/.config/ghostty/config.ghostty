@@ -16,6 +16,8 @@ macos-option-as-alt = true
 # special escape sequences that tmux.conf binds to window-switching
 keybind = super+alt+arrow_right=csi:1;6C
 keybind = super+alt+arrow_left=csi:1;6D
+# send Cmd+E through as escape sequence to open the workmux dashboard
+keybind = super+e=csi:101;6u
 
 # machine-local overrides
 config-file = ?~/.config/ghostty/config.ghostty.local

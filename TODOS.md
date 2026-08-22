@@ -10,8 +10,6 @@ commit message. When an item is done, delete it rather than marking it done.
 
 ## Packages to add
 
-- **workmux** — decide whether any of it belongs here, including the skills it installs
-  into `~/.claude/skills`
 - **agents** — track the `~/.agents` skill inventory, and prune the ones I no longer use
 
 ## Tooling
@@ -21,5 +19,8 @@ commit message. When an item is done, delete it rather than marking it done.
 - Script that automates per-machine setup, rather than the README list of manual steps:
   prompt for `user.email`, guide creating the Secretive key, register it with `gh`, set
   `user.signingkey`
+- Decide whether to own and customise the skills `workmux setup` installs into
+  `~/.claude/skills`, per the open question in ADR 0017
 - Investigate `delta` display configuration options
-- Re-evaluate Gruvbox Dark Hard as the palette across Ghostty, starship, and fish
+- Re-evaluate Gruvbox Dark Hard as the palette across Ghostty, starship, fish, and the
+  workmux dashboard
