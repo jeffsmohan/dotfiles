@@ -1,3 +1,4 @@
+--  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
 --[[
 
 =====================================================================
@@ -773,14 +774,14 @@ do
   })
 
   -- Enable the following language servers
-  --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
   --  See `:help lsp-config` for information about keys and how to configure
   ---@type table<string, vim.lsp.Config>
   local servers = {
     ts_ls = {},
-    -- Point pyright at the project's venv automatically
     pyright = {
       on_init = function(client)
+        -- Point pyright at the project's venv automatically
+        -- (set client.settings and notify, or pyright won't see it)
         local venv = vim.fs.root(client.config.root_dir, ".venv")
         local python = venv and (venv .. "/.venv/bin/python")
         if python and vim.uv.fs_stat(python) then
@@ -895,12 +896,30 @@ do
     },
     -- You can also specify external formatters in here.
     formatters_by_ft = {
-      -- rust = { 'rustfmt' },
-      -- Conform can also run multiple formatters sequentially
-      -- python = { "isort", "black" },
-      --
-      -- You can use 'stop_after_first' to run the first available formatter from the list
-      -- javascript = { "prettierd", "prettier", stop_after_first = true },
+      lua = { "stylua" },
+      python = { "ruff_format" },
+      fish = { "fish_indent" },
+      css = { "prettier" },
+      javascript = { "prettier" },
+      javascriptreact = { "prettier" },
+      json = { "prettier" },
+      jsonc = { "prettier" },
+      typescript = { "prettier" },
+      typescriptreact = { "prettier" },
+    },
+    formatters = {
+      -- Only format Lua where a `.stylua.toml` actually governs the file.
+      -- Otherwise, StyLua falls back to its own defaults, and since this file
+      -- is a symline to dotfiles, discvoery starts outside the repo and finds none.
+      stylua = { require_cwd = true },
+      -- Prefer the project's own ruff over Mason's (prevent version drift)
+      ruff_format = {
+        command = function(_, ctx)
+          local venv = vim.fs.root(ctx.dirname, ".venv")
+          local ruff = venv and (venv .. "/.venv/bin/ruff")
+          return (ruff and vim.uv.fs_stat(ruff)) and ruff or "ruff"
+        end,
+      },
     },
   })
 
