@@ -29,3 +29,10 @@ mastery of this key tool.
 
 **Stock loses on time.** The gap between it and a working editor is real work that
 kickstart has already done and documented.
+
+## More Information
+
+Plugins are managed by `vim.pack`, Neovim's built-in package manager and kickstart's own
+choice. Its lockfile lives at `$XDG_CONFIG_HOME/nvim/nvim-pack-lock.json` and is
+deliberately untracked, with no `.gitignore` rule involved: `--no-folding` symlinks only
+`init.lua`, so everything else in `~/.config/nvim/` sits outside this repo.
