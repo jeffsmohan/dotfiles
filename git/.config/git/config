@@ -27,7 +27,8 @@
 	navigate = true
 	line-numbers = true
 	hyperlinks = true
-	syntax-theme = gruvbox-dark
+	# ANSI slots, not hex, so diffs follow Ghostty's theme like everything else.
+	syntax-theme = base16
 
 [diff]
 	algorithm = histogram

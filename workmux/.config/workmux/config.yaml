@@ -13,6 +13,5 @@ panes: # Left pane agent; right pane shell
 
 # Display
 nerdfont: true
-theme:
-  scheme: glacier-signal
-  mode: dark
+# The dashboard picks from twelve of its own schemes and takes no palette input
+theme: glacier-signal

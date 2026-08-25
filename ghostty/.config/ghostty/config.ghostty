@@ -1,6 +1,29 @@
 # Display
-theme = Gruvbox Dark Hard
-minimum-contrast = 1.1
+#
+# This is the whole palette. tmux, fish, and starship name the 16 ANSI slots rather
+# than hex, so `theme` re-colours all of them at once; `ghostty +list-themes` is the
+# candidate pool. Only neovim needs a matching edit, in its own colourscheme.
+#
+# Slot 18 is the chrome band: the tmux status bar and the starship prompt both need a
+# shade one step off the background, and the 16 slots have none. base24 assigns that
+# role to slot 18 ("lighter background, used for status bars"), so this follows the
+# spec rather than inventing a slot. It doubles as the ink on the accent blocks in
+# both, which is what keeps them legible on a light theme as well as a dark one.
+# Each value below is the theme's own next-background-up, not something derived.
+#
+# Trial themes, swap in one pair:
+#   Selenized Dark          18=#184956
+#   Kanagawa Wave           18=#2a2a37
+#   iTerm2 Solarized Dark   18=#073642
+#   Everforest Dark Hard    18=#2e383c  background = #272e33
+#   Modus Vivendi           18=#1e1e1e
+#   Modus Operandi          18=#f2f2f2
+#
+# Everforest needs the extra line: Ghostty's theme paints the background with
+# Everforest's dim shade, where the editor plugin uses bg0. Overriding it here keeps
+# the two the same colour, and moves the band up to bg1.
+theme = Selenized Dark
+palette = 18=#184956
 font-family = "FiraMono Nerd Font Mono"
 font-size = 12
 

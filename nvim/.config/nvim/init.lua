@@ -397,23 +397,29 @@ do
   })
 
   -- [[ Colorscheme ]]
-  -- You can easily change to a different colorscheme.
-  -- Change the name of the colorscheme plugin below, and then
-  -- change the command under that to load whatever the name of that colorscheme is.
+  -- The terminal palette is the source of truth for tmux, fish, and starship (ADR
+  -- 0020), but not here: sixteen colours are too few for syntax highlighting, so
+  -- the editor gets a real colourscheme hand-paired with Ghostty's theme.
   --
-  -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-  vim.pack.add({ gh("folke/tokyonight.nvim") })
-  ---@diagnostic disable-next-line: missing-fields
-  require("tokyonight").setup({
-    styles = {
-      comments = { italic = false }, -- Disable italics in comments
-    },
+  -- These are the trial candidates. All load; only the one named at the bottom is
+  -- applied. Delete the losers once a theme is chosen.
+  vim.pack.add({
+    gh("calind/selenized.nvim"), -- selenized
+    gh("rebelot/kanagawa.nvim"), -- kanagawa-wave, kanagawa-dragon
+    gh("maxmx03/solarized.nvim"), -- solarized
+    gh("neanias/everforest-nvim"), -- everforest
+    gh("miikanissi/modus-themes.nvim"), -- modus_vivendi, modus_operandi
   })
 
-  -- Load the colorscheme here.
-  -- Like many other themes, this one has different styles, and you could load
-  -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-  vim.cmd.colorscheme("tokyonight-night")
+  -- Italic comments, and the exact variant Ghostty is set to. Each plugin spells
+  -- these differently; configuring a scheme that is not active costs nothing.
+  -- Fira Mono has no italic face, so Ghostty slants the upright one for these.
+  require("kanagawa").setup({ commentStyle = { italic = true } })
+  require("solarized").setup({ styles = { comments = { italic = true } } })
+  require("modus-themes").setup({ styles = { comments = { italic = true } } })
+  require("everforest").setup({ background = "hard", disable_italic_comments = false })
+
+  vim.cmd.colorscheme("selenized")
 
   -- Highlight todo, notes, etc in comments
   vim.pack.add({ gh("folke/todo-comments.nvim") })
