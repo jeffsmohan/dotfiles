@@ -8,10 +8,6 @@ commit message. When an item is done, delete it rather than marking it done.
 
 - The local-overlay pattern itself, if it outgrows the README paragraph
 
-## Packages to add
-
-- **agents** — track the `~/.agents` skill inventory, and prune the ones I no longer use
-
 ## Tooling
 
 - Track `formula/tmux@3.6b.rb` and teach `bootstrap.sh` to build the pinned tmux from it,
