@@ -12,3 +12,6 @@ set -gx LESS FiR
 
 # Keep less from leaving a search history in ~/.lesshst.
 set -gx LESSHISTFILE -
+
+# ripgrep reads no config unless this names one.
+set -gx RIPGREP_CONFIG_PATH $HOME/.config/ripgrep/ripgreprc

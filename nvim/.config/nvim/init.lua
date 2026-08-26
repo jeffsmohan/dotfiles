@@ -522,6 +522,10 @@ do
   -- NOTE: You can install multiple plugins at once
   vim.pack.add(telescope_plugins)
 
+  -- These pickers shell out to ripgrep, which reads ~/.config/ripgrep/ripgreprc
+  -- via RIPGREP_CONFIG_PATH. That is where dot-directories are switched on for
+  -- search, so there is deliberately no `hidden` option below.
+  --
   -- See `:help telescope` and `:help telescope.setup()`
   require("telescope").setup({
     -- You can put your default mappings / updates / etc. in here

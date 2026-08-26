@@ -1,0 +1,8 @@
+# ripgrep has no default config location: it reads this file only because
+# RIPGREP_CONFIG_PATH names it, from fish/.config/fish/conf.d/environment.fish.
+
+# Dot-directories are (mostly) ordinary source (.github, .claude), so include.
+--hidden
+
+# .git is the one dot-directory we generally *don't* want included
+--glob=!**/.git
