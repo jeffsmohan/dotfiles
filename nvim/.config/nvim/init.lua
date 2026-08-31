@@ -85,6 +85,11 @@ I hope you enjoy your Neovim journey,
 P.S. You can delete this when you're done too. It's your config now! :)
 --]]
 
+-- Helpers
+local function gh(repo)
+  return "https://github.com/" .. repo
+end
+
 -- ============================================================
 -- SECTION 1: OPTIONS
 -- Core Neovim settings, leaders, options
@@ -338,14 +343,6 @@ do
       end
     end,
   })
-end
-
----Because most plugins are hosted on GitHub, you can use the helper
----function to have less repetition in the following sections.
----@param repo string
----@return string
-local function gh(repo)
-  return "https://github.com/" .. repo
 end
 
 -- ============================================================
