@@ -172,41 +172,60 @@ do
   })
 end
 
--- ============================================================
--- SECTION 4: UI / CORE UX PLUGINS
--- guess-indent, gitsigns, which-key, colorscheme, todo-comments, mini modules
--- ============================================================
+-- PLUGIN: Gitsigns
 do
-  -- [[ Installing and Configuring Plugins ]]
-  --
-  -- To install a plugin simply call `vim.pack.add` with its git url.
-  -- This will download the default branch of the plugin, which will usually be `main` or `master`
-  -- You can also have more advanced specs, which we will talk about later.
-  --
-  -- For most plugins its not enough to install them, you also need to call their `.setup()` to start them.
-  --
-  -- For example, lets say we want to install `guess-indent.nvim` - a plugin for
-  -- automatically detecting and setting the indentation.
-  --
-  -- We first install it from https://github.com/NMAC427/guess-indent.nvim
-  -- and then call its `setup()` function to start it with default settings.
+  vim.pack.add({ gh("lewis6991/gitsigns.nvim") })
+  local gitsigns = require("gitsigns")
+
+  -- Helper to toggle blame sidebar (close buffer if open; open if not)
+  local function toggle_blame()
+    for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+      local buf = vim.api.nvim_win_get_buf(win)
+      if vim.bo[buf].filetype == "gitsigns-blame" then
+        vim.api.nvim_win_close(win, false)
+        return
+      end
+    end
+    gitsigns.blame()
+  end
+
+  -- Gitsigns config and keymaps
+  gitsigns.setup({
+    on_attach = function(buffer)
+      local map = function(keys, func, desc)
+        vim.keymap.set("n", "<leader>g" .. keys, func, { buffer = buffer, desc = desc })
+      end
+      map("b", gitsigns.blame_line, "[G]it [B]lame line")
+      map("B", toggle_blame, "[G]it [B]lame file (toggle)")
+      map("s", gitsigns.stage_hunk, "[G]it [S]tage hunk")
+      map("S", gitsigns.reset_hunk, "[G]it un[S]tage hunk")
+      map("p", gitsigns.preview_hunk, "[G]it [P]review hunk")
+      map("d", gitsigns.diffthis, "[G]it [D]iff")
+    end,
+  })
+
+  -- Gitsigns blame sidebar keymaps
+  vim.api.nvim_create_autocmd("FileType", {
+    desc = "Set up toggle/close commands on blame buffers",
+    pattern = "gitsigns-blame",
+    group = vim.api.nvim_create_augroup("gitsigns-blame-keys", { clear = true }),
+    callback = function(args)
+      vim.keymap.set("n", "<leader>gB", toggle_blame, {
+        buffer = args.buf,
+        desc = "[G]it [B]lame file (toggle)",
+      })
+      vim.keymap.set("n", "q", "<cmd>close<CR>", {
+        buffer = args.buf,
+        desc = "Close blame",
+      })
+    end,
+  })
+end
+
+-- PLUGINS: core UI/UX
+do
   vim.pack.add({ gh("NMAC427/guess-indent.nvim") })
   require("guess-indent").setup({})
-
-  -- Here is a more advanced configuration example that passes options to `gitsigns.nvim`
-  --
-  -- See `:help gitsigns` to understand what each configuration key does.
-  -- Adds git related signs to the gutter, as well as utilities for managing changes
-  vim.pack.add({ gh("lewis6991/gitsigns.nvim") })
-  require("gitsigns").setup({
-    signs = {
-      add = { text = "+" }, ---@diagnostic disable-line: missing-fields
-      change = { text = "~" }, ---@diagnostic disable-line: missing-fields
-      delete = { text = "_" }, ---@diagnostic disable-line: missing-fields
-      topdelete = { text = "‾" }, ---@diagnostic disable-line: missing-fields
-      changedelete = { text = "~" }, ---@diagnostic disable-line: missing-fields
-    },
-  })
 
   -- Useful plugin to show you pending keybinds.
   vim.pack.add({ gh("folke/which-key.nvim") })
@@ -218,7 +237,7 @@ do
     spec = {
       { "<leader>s", group = "[S]earch", mode = { "n", "v" } },
       { "<leader>t", group = "[T]oggle" },
-      { "<leader>h", group = "Git [H]unk", mode = { "n", "v" } }, -- Enable gitsigns recommended keymaps first
+      { "<leader>g", group = "[G]it" },
       { "gr", group = "LSP Actions", mode = { "n" } },
     },
   })
