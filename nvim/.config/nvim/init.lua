@@ -168,7 +168,7 @@ do
   vim.o.cursorline = true
 
   -- Give floating windows a border
-  vim.o.winborder = "rounded"
+  vim.o.winborder = "bold"
 
   -- Minimal number of screen lines to keep above and below the cursor.
   vim.o.scrolloff = 10
@@ -402,27 +402,15 @@ do
   -- [[ Colorscheme ]]
   -- The terminal palette is the source of truth for tmux, fish, and starship (ADR
   -- 0020), but not here: sixteen colours are too few for syntax highlighting, so
-  -- the editor gets a real colourscheme hand-paired with Ghostty's theme.
-  --
-  -- These are the trial candidates. All load; only the one named at the bottom is
-  -- applied. Delete the losers once a theme is chosen.
+  -- the editor gets a real colourscheme hand-paired with Ghostty's theme
   vim.pack.add({
-    gh("calind/selenized.nvim"), -- selenized
     gh("rebelot/kanagawa.nvim"), -- kanagawa-wave, kanagawa-dragon
-    gh("maxmx03/solarized.nvim"), -- solarized
-    gh("neanias/everforest-nvim"), -- everforest
-    gh("miikanissi/modus-themes.nvim"), -- modus_vivendi, modus_operandi
   })
 
-  -- Italic comments, and the exact variant Ghostty is set to. Each plugin spells
-  -- these differently; configuring a scheme that is not active costs nothing.
-  -- Fira Mono has no italic face, so Ghostty slants the upright one for these.
+  -- Fira Mono has no italic face, so Ghostty slants the upright one for comments.
   require("kanagawa").setup({ commentStyle = { italic = true } })
-  require("solarized").setup({ styles = { comments = { italic = true } } })
-  require("modus-themes").setup({ styles = { comments = { italic = true } } })
-  require("everforest").setup({ background = "hard", disable_italic_comments = false })
 
-  vim.cmd.colorscheme("selenized")
+  vim.cmd.colorscheme("kanagawa-wave")
 
   -- Highlight todo, notes, etc in comments
   vim.pack.add({ gh("folke/todo-comments.nvim") })

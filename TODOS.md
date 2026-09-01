@@ -18,7 +18,4 @@ commit message. When an item is done, delete it rather than marking it done.
 - Decide whether to own and customise the skills `workmux setup` installs into
   `~/.claude/skills`, per the open question in ADR 0017
 - Investigate `delta` display configuration options
-- Run the theme trial, one full working day each, and record the winner in an ADR:
-  Selenized Dark, Kanagawa Wave, iTerm2 Solarized Dark, Everforest Dark Hard, Modus
-  Vivendi, Modus Operandi
 - Redesign the tmux status bar and window list against the chosen palette
