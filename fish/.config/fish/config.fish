@@ -2,6 +2,9 @@
 if status is-interactive
     set -g fish_key_bindings fish_vi_key_bindings
 
+    abbr vim nvim
+    abbr vi nvim
+
     abbr gad "git add"
     abbr gadd "git add -A"
     abbr gadp "git add -p"
