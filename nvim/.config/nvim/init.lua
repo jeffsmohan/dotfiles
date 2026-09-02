@@ -172,6 +172,13 @@ do
   })
 end
 
+-- THEME/COLORS: Kanagawa Wave
+do
+  -- Terminal palette isn't rich enough an editor, so use the full vim theme
+  vim.pack.add({ gh("rebelot/kanagawa.nvim") })
+  vim.cmd.colorscheme("kanagawa-wave")
+end
+
 -- PLUGIN: Gitsigns
 do
   vim.pack.add({ gh("lewis6991/gitsigns.nvim") })
@@ -241,22 +248,6 @@ do
       { "gr", group = "LSP Actions", mode = { "n" } },
     },
   })
-end
-
--- THEME/COLORS
-do
-  -- [[ Colorscheme ]]
-  -- The terminal palette is the source of truth for tmux, fish, and starship (ADR
-  -- 0020), but not here: sixteen colours are too few for syntax highlighting, so
-  -- the editor gets a real colourscheme hand-paired with Ghostty's theme
-  vim.pack.add({
-    gh("rebelot/kanagawa.nvim"), -- kanagawa-wave, kanagawa-dragon
-  })
-
-  -- Fira Mono has no italic face, so Ghostty slants the upright one for comments.
-  require("kanagawa").setup({ commentStyle = { italic = true } })
-
-  vim.cmd.colorscheme("kanagawa-wave")
 end
 
 -- PLUGIN: todo-comments
