@@ -266,6 +266,11 @@ do
   require("mini.icons").setup()
   MiniIcons.mock_nvim_web_devicons()
 
+  require("mini.surround").setup()
+  require("mini.move").setup()
+  require("mini.splitjoin").setup()
+  require("mini.pairs").setup()
+
   require("mini.ai").setup({
     -- NOTE: Avoid conflicts with the built-in incremental selection mappings on Neovim>=0.12 (see `:help treesitter-incremental-selection`)
     mappings = {
@@ -275,30 +280,12 @@ do
     n_lines = 500,
   })
 
-  -- Add/delete/replace surroundings (brackets, quotes, etc.)
-  --
-  -- - saiw) - [S]urround [A]dd [I]inner [W]ord [)]Paren
-  -- - sd'   - [S]urround [D]elete [']quotes
-  -- - sr)'  - [S]urround [R]eplace [)] [']
-  require("mini.surround").setup()
-
-  -- Simple and easy statusline.
-  --  You could remove this setup call if you don't like it,
-  --  and try some other statusline plugin
   local statusline = require("mini.statusline")
-  -- Set `use_icons` to true if you have a Nerd Font
-  statusline.setup({ use_icons = vim.g.have_nerd_font })
-
-  -- You can configure sections in the statusline by overriding their
-  -- default behavior. For example, here we set the section for
-  -- cursor location to LINE:COLUMN
+  statusline.setup({ use_icons = true })
   ---@diagnostic disable-next-line: duplicate-set-field
   statusline.section_location = function()
     return "%2l:%-2v"
   end
-
-  -- ... and there is more!
-  --  Check out: https://github.com/nvim-mini/mini.nvim
 end
 
 -- ============================================================
