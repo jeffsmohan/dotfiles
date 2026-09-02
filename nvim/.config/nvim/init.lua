@@ -25,7 +25,7 @@ do
   -- Timing/behaviors
   vim.o.confirm = true
   vim.o.updatetime = 250
-  vim.o.timeoutlen = 300
+  vim.o.timeoutlen = 1000
   vim.schedule(function() -- deferred for faster startup time
     vim.o.clipboard = "unnamedplus" -- sync nvim/OS clipboards
   end)
@@ -222,26 +222,29 @@ do
   })
 end
 
--- PLUGINS: core UI/UX
+-- PLUGIN: guess-indent
 do
   vim.pack.add({ gh("NMAC427/guess-indent.nvim") })
   require("guess-indent").setup({})
+end
 
-  -- Useful plugin to show you pending keybinds.
+-- PLUGIN: which-key
+do
   vim.pack.add({ gh("folke/which-key.nvim") })
   require("which-key").setup({
-    -- Delay between pressing a key and opening which-key (milliseconds)
-    delay = 0,
+    delay = 500,
+    preset = "modern",
     icons = { mappings = vim.g.have_nerd_font },
-    -- Document existing key chains
     spec = {
       { "<leader>s", group = "[S]earch", mode = { "n", "v" } },
-      { "<leader>t", group = "[T]oggle" },
       { "<leader>g", group = "[G]it" },
       { "gr", group = "LSP Actions", mode = { "n" } },
     },
   })
+end
 
+-- THEME/COLORS
+do
   -- [[ Colorscheme ]]
   -- The terminal palette is the source of truth for tmux, fish, and starship (ADR
   -- 0020), but not here: sixteen colours are too few for syntax highlighting, so
@@ -254,28 +257,24 @@ do
   require("kanagawa").setup({ commentStyle = { italic = true } })
 
   vim.cmd.colorscheme("kanagawa-wave")
+end
 
-  -- Highlight todo, notes, etc in comments
+-- PLUGIN: todo-comments
+do
   vim.pack.add({ gh("folke/todo-comments.nvim") })
   require("todo-comments").setup({ signs = false })
+  vim.keymap.set("n", "<leader>st", "<cmd>TodoTelescope<CR>", {
+    desc = "[S]earch [T]odos",
+  })
+end
 
-  -- [[ mini.nvim ]]
-  --  A collection of various small independent plugins/modules
+-- PLUGIN: mini.nvim modules
+do
   vim.pack.add({ gh("nvim-mini/mini.nvim") })
 
-  -- If a nerd font is available, load the icons module for pretty icons in various plugins.
-  if vim.g.have_nerd_font then
-    require("mini.icons").setup()
-    -- Used for backwards compatibility with plugins that require `nvim-web-devicons` (e.g. telescope.nvim)
-    MiniIcons.mock_nvim_web_devicons()
-  end
+  require("mini.icons").setup()
+  MiniIcons.mock_nvim_web_devicons()
 
-  -- Better Around/Inside textobjects
-  --
-  -- Examples:
-  --  - va)  - [V]isually select [A]round [)]paren
-  --  - yiiq - [Y]ank [I]nside [I]+1 [Q]uote
-  --  - ci'  - [C]hange [I]nside [']quote
   require("mini.ai").setup({
     -- NOTE: Avoid conflicts with the built-in incremental selection mappings on Neovim>=0.12 (see `:help treesitter-incremental-selection`)
     mappings = {
