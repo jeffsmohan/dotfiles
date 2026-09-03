@@ -24,7 +24,7 @@ add_newline = false
 disabled = true
 
 [aws]
-format = '[ ( $profile)( \($region\))](bg:18 fg:bright-red)'
+format = '[ ( $profile)( \($region\))](bg:18 fg:bright-yellow)'
 
 [directory]
 format = '[  $path$read_only](bg:18 fg:bright-blue)'
