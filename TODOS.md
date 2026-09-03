@@ -19,3 +19,4 @@ commit message. When an item is done, delete it rather than marking it done.
   `~/.claude/skills`, per the open question in ADR 0017
 - Investigate `delta` display configuration options
 - Redesign the tmux status bar and window list against the chosen palette
+- Investigate `vim-tmux-navigator` for unified pane/split movement across nvim and tmux
