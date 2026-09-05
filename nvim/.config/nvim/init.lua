@@ -235,6 +235,17 @@ do
   require("guess-indent").setup({})
 end
 
+-- PLUGIN: indent-blankline (visual bars for indent levels)
+do
+  vim.pack.add({ gh("lukas-reineke/indent-blankline.nvim") })
+  require("ibl").setup({
+    indent = {
+      char = "▏",
+    },
+    scope = { enabled = false },
+  })
+end
+
 -- PLUGIN: which-key (vim key binding reminders)
 do
   vim.pack.add({ gh("folke/which-key.nvim") })
