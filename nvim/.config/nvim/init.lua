@@ -58,7 +58,7 @@ do
   vim.g.have_nerd_font = true
   vim.o.splitright = true
   vim.o.splitbelow = true
-  vim.o.winborder = "bold"
+  vim.o.winborder = "rounded"
 end
 
 -- KEYMAPS: basic mappings
@@ -180,7 +180,13 @@ do
   vim.cmd.colorscheme("kanagawa-wave")
 end
 
--- PLUGIN: Gitsigns
+-- PLUGIN: fidget (bottom-right notifications display)
+do
+  vim.pack.add({ gh("j-hui/fidget.nvim") })
+  require("fidget").setup({})
+end
+
+-- PLUGIN: Gitsigns (git status gutter, blame, etc.)
 do
   vim.pack.add({ gh("lewis6991/gitsigns.nvim") })
   local gitsigns = require("gitsigns")
@@ -230,13 +236,13 @@ do
   })
 end
 
--- PLUGIN: guess-indent
+-- PLUGIN: guess-indent (autodetect file indentation)
 do
   vim.pack.add({ gh("NMAC427/guess-indent.nvim") })
   require("guess-indent").setup({})
 end
 
--- PLUGIN: which-key
+-- PLUGIN: which-key (vim key binding reminders)
 do
   vim.pack.add({ gh("folke/which-key.nvim") })
   require("which-key").setup({
@@ -246,12 +252,13 @@ do
     spec = {
       { "<leader>s", group = "[S]earch", mode = { "n", "v" } },
       { "<leader>g", group = "[G]it" },
+      { "<leader>t", group = "[T]oggle" },
       { "gr", group = "LSP Actions", mode = { "n" } },
     },
   })
 end
 
--- PLUGIN: todo-comments
+-- PLUGIN: todo-comments (highlight special comments)
 do
   vim.pack.add({ gh("folke/todo-comments.nvim") })
   require("todo-comments").setup({ signs = false })
@@ -260,7 +267,7 @@ do
   })
 end
 
--- PLUGIN: mini.nvim modules
+-- PLUGIN: mini.nvim modules (various little helpers)
 do
   vim.pack.add({ gh("nvim-mini/mini.nvim") })
 
@@ -289,7 +296,7 @@ do
   end
 end
 
--- SEARCH/NAVIGATION: telescope
+-- PLUGIN: telescope (search/fuzzy find)
 do
   vim.pack.add({
     gh("nvim-lua/plenary.nvim"),
@@ -407,75 +414,28 @@ do
   })
 end
 
--- ============================================================
--- SECTION 6: LSP
--- LSP keymaps, server configuration, Mason tools installations
--- ============================================================
+-- MASON: package registry for language servers and tools
 do
-  -- [[ LSP Configuration ]]
-  -- Brief aside: **What is LSP?**
-  --
-  -- LSP is an initialism you've probably heard, but might not understand what it is.
-  --
-  -- LSP stands for Language Server Protocol. It's a protocol that helps editors
-  -- and language tooling communicate in a standardized fashion.
-  --
-  -- In general, you have a "server" which is some tool built to understand a particular
-  -- language (such as `gopls`, `lua_ls`, `rust_analyzer`, etc.). These Language Servers
-  -- (sometimes called LSP servers, but that's kind of like ATM Machine) are standalone
-  -- processes that communicate with some "client" - in this case, Neovim!
-  --
-  -- LSP provides Neovim with features like:
-  --  - Go to definition
-  --  - Find references
-  --  - Autocompletion
-  --  - Symbol Search
-  --  - and more!
-  --
-  -- Thus, Language Servers are external tools that must be installed separately from
-  -- Neovim. This is where `mason` and related plugins come into play.
-  --
-  -- If you're wondering about lsp vs treesitter, you can check out the wonderfully
-  -- and elegantly composed help section, `:help lsp-vs-treesitter`
+  vim.pack.add({ gh("mason-org/mason.nvim") })
+  require("mason").setup({})
+end
 
-  -- Useful status updates for LSP.
-  vim.pack.add({ gh("j-hui/fidget.nvim") })
-  require("fidget").setup({})
-
-  --  This function gets run when an LSP attaches to a particular buffer.
-  --    That is to say, every time a new file is opened that is associated with
-  --    an lsp (for example, opening `main.rs` is associated with `rust_analyzer`) this
-  --    function will be executed to configure the current buffer
+-- LSP configuration
+do
+  -- Turn LSP keymaps/features on/off when attaching
   vim.api.nvim_create_autocmd("LspAttach", {
     group = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true }),
     callback = function(event)
-      -- NOTE: Remember that Lua is a real programming language, and as such it is possible
-      -- to define small helper and utility functions so you don't have to repeat yourself.
-      --
-      -- In this case, we create a function that lets us more easily define mappings specific
-      -- for LSP related items. It sets the mode, buffer and description for us each time.
       local map = function(keys, func, desc, mode)
         mode = mode or "n"
         vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
       end
 
-      -- Rename the variable under your cursor.
-      --  Most Language Servers support renaming across files, etc.
       map("grn", vim.lsp.buf.rename, "[R]e[n]ame")
-
-      -- Execute a code action, usually your cursor needs to be on top of an error
-      -- or a suggestion from your LSP for this to activate.
       map("gra", vim.lsp.buf.code_action, "[G]oto Code [A]ction", { "n", "x" })
-
-      -- WARN: This is not Goto Definition, this is Goto Declaration.
-      --  For example, in C this would take you to the header.
       map("grD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
 
-      -- The following two autocommands are used to highlight references of the
-      -- word under your cursor when your cursor rests there for a little while.
-      --    See `:help CursorHold` for information about when this is executed
-      --
-      -- When you move your cursor, the highlights will be cleared (the second autocommand).
+      -- Highlighting when you leave your cursor on a reference
       local client = vim.lsp.get_client_by_id(event.data.client_id)
       if
         client and client:supports_method("textDocument/documentHighlight", event.buf)
@@ -487,13 +447,11 @@ do
           group = highlight_augroup,
           callback = vim.lsp.buf.document_highlight,
         })
-
         vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
           buffer = event.buf,
           group = highlight_augroup,
           callback = vim.lsp.buf.clear_references,
         })
-
         vim.api.nvim_create_autocmd("LspDetach", {
           group = vim.api.nvim_create_augroup("kickstart-lsp-detach", { clear = true }),
           callback = function(event2)
@@ -506,10 +464,7 @@ do
         })
       end
 
-      -- The following code creates a keymap to toggle inlay hints in your
-      -- code, if the language server you are using supports them
-      --
-      -- This may be unwanted, since they displace some of your code
+      -- "Inlay" hints (e.g. ghost argument names)
       if client and client:supports_method("textDocument/inlayHint", event.buf) then
         map("<leader>th", function()
           vim.lsp.inlay_hint.enable(
@@ -520,16 +475,32 @@ do
     end,
   })
 
-  -- Enable the following language servers
-  --  See `:help lsp-config` for information about keys and how to configure
+  -- Enabled LSPs
   ---@type table<string, vim.lsp.Config>
   local servers = {
-    ts_ls = {},
+    -- Web/TypeScript
+    vtsls = {},
+    eslint = {},
+    tailwindcss = {},
+    cssls = {},
+
+    -- Config and markup
+    jsonls = {},
+    yamlls = {},
+    taplo = {},
+    marksman = {},
+
+    -- Shell and containers
+    bashls = {},
+    dockerls = {},
+
+    -- Python
     pyright = {
       on_init = function(client)
-        -- Point pyright at the project's venv automatically
-        -- (set client.settings and notify, or pyright won't see it)
-        local venv = vim.fs.root(client.config.root_dir, ".venv")
+        -- root_dir is nil for a standalone file opened outside any project,
+        -- and vim.fs.root throws rather than returning nil on a nil argument.
+        local root = client.config.root_dir
+        local venv = root and vim.fs.root(root, ".venv")
         local python = venv and (venv .. "/.venv/bin/python")
         if python and vim.uv.fs_stat(python) then
           client.settings = vim.tbl_deep_extend("force", client.settings or {}, {
@@ -540,11 +511,11 @@ do
       end,
     },
     ruff = {},
-    -- Special Lua Config, as recommended by neovim help docs
+
+    -- Lua
     lua_ls = {
       on_init = function(client)
         client.server_capabilities.documentFormattingProvider = false -- Disable formatting (formatting is done by stylua)
-
         if client.workspace_folders then
           local path = client.workspace_folders[1].name
           if
@@ -557,7 +528,6 @@ do
             return
           end
         end
-
         local current_settings = client.config.settings --[[@as lspconfig.settings.lua_ls]]
         client.config.settings.Lua = vim.tbl_deep_extend("force", current_settings.Lua, {
           runtime = {
@@ -583,33 +553,15 @@ do
 
   vim.pack.add({
     gh("neovim/nvim-lspconfig"),
-    gh("mason-org/mason.nvim"),
     gh("mason-org/mason-lspconfig.nvim"),
-    gh("WhoIsSethDaniel/mason-tool-installer.nvim"),
   })
 
-  -- Automatically install LSPs and related tools to stdpath for Neovim
-  require("mason").setup({})
-
-  -- Translates between nvim-lspconfig server names and mason.nvim package names (e.g. lua_ls <-> lua-language-server)
+  -- Installs the servers above, translating between nvim-lspconfig names and
+  -- mason.nvim package names (e.g. lua_ls <-> lua-language-server)
   require("mason-lspconfig").setup({
-    automatic_enable = false, -- Change this to true if you want to automatically enable servers that are installed manually (e.g. via :Mason / :MasonInstall)
+    ensure_installed = vim.tbl_keys(servers or {}),
+    automatic_enable = false, -- each server is enabled explicitly below
   })
-
-  -- Ensure the servers and tools above are installed
-  --
-  -- To check the current status of installed tools and/or manually install
-  -- other tools, you can run
-  --    :Mason
-  --
-  -- You can press `g?` for help in this menu.
-  local ensure_installed = vim.tbl_keys(servers or {})
-  vim.list_extend(ensure_installed, {
-    -- You can add other tools here that you want Mason to install
-    "stylua", -- Used to format lua code
-  })
-
-  require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
   for name, server in pairs(servers) do
     vim.lsp.config(name, server)
@@ -617,49 +569,73 @@ do
   end
 end
 
--- ============================================================
--- SECTION 7: FORMATTING
--- conform.nvim setup and keymap
--- ============================================================
+-- FORMATTING: conform.nvim
 do
-  -- [[ Formatting ]]
-  vim.pack.add({ gh("stevearc/conform.nvim") })
+  vim.pack.add({
+    gh("stevearc/conform.nvim"),
+    gh("WhoIsSethDaniel/mason-tool-installer.nvim"),
+  })
+
+  -- Global fallbacks for the formatters below. Where a repo vendors its own
+  -- (prettier in node_modules, ruff in .venv) conform prefers that one
+  require("mason-tool-installer").setup({
+    ensure_installed = {
+      "stylua", -- lua
+      "prettier", -- web, json, yaml, markdown
+      "shfmt", -- sh, bash
+    },
+  })
+
   require("conform").setup({
     notify_on_error = false,
+
+    -- Format on save everywhere. The formatters below use the
+    -- project's own CLI tools, so each one discovers the repo's config on its
+    -- own (.stylua.toml, [tool.ruff], .prettierrc, .editorconfig). Where a repo
+    -- has no opinion, we format using the tool's defaults.
     format_on_save = function(bufnr)
-      -- You can specify filetypes to autoformat on save here:
-      local enabled_filetypes = {
-        -- lua = true,
-        -- python = true,
-      }
-      if enabled_filetypes[vim.bo[bufnr].filetype] then
-        return { timeout_ms = 500 }
-      else
+      if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
         return nil
       end
+      return { timeout_ms = 1000 }
     end,
     default_format_opts = {
-      lsp_format = "fallback", -- Use external formatters if configured below, otherwise use LSP formatting. Set to `false` to disable LSP formatting entirely.
+      lsp_format = "fallback", -- Use external formatters if configured below, otherwise use LSP formatting
     },
-    -- You can also specify external formatters in here.
     formatters_by_ft = {
       lua = { "stylua" },
-      python = { "ruff_format" },
+      python = { "ruff_organize_imports", "ruff_format" },
       fish = { "fish_indent" },
+      sh = { "shfmt" },
+      bash = { "shfmt" },
+      toml = { "taplo" },
       css = { "prettier" },
+      scss = { "prettier" },
+      less = { "prettier" },
+      html = { "prettier" },
+      graphql = { "prettier" },
       javascript = { "prettier" },
       javascriptreact = { "prettier" },
       json = { "prettier" },
       jsonc = { "prettier" },
       typescript = { "prettier" },
       typescriptreact = { "prettier" },
+      yaml = { "prettier" },
+      markdown = { "prettier" },
     },
     formatters = {
-      -- Only format Lua where a `.stylua.toml` actually governs the file.
-      -- Otherwise, StyLua falls back to its own defaults, and since this file
-      -- is a symline to dotfiles, discvoery starts outside the repo and finds none.
-      stylua = { require_cwd = true },
-      -- Prefer the project's own ruff over Mason's (prevent version drift)
+      -- StyLua looks for `.stylua.toml` upward from the buffer's directory, but
+      -- this file is reached through a stow symlink, so that search starts in
+      -- ~/.config/nvim and never reaches the dotfiles repo. Resolve the symlink
+      -- first so the repo's config wins. Elsewhere this returns nil and StyLua
+      -- runs with its own defaults, which is the behaviour we want.
+      stylua = {
+        cwd = function(_, ctx)
+          local realpath = vim.uv.fs_realpath(ctx.filename) or ctx.filename
+          return vim.fs.root(vim.fs.dirname(realpath), { ".stylua.toml", "stylua.toml" })
+        end,
+      },
+      -- Prefer the project's own ruff over Mason's
       ruff_format = {
         command = function(_, ctx)
           local venv = vim.fs.root(ctx.dirname, ".venv")
@@ -673,6 +649,19 @@ do
   vim.keymap.set({ "n", "v" }, "<leader>f", function()
     require("conform").format({ async = true })
   end, { desc = "[F]ormat buffer" })
+
+  vim.api.nvim_create_user_command("FormatDisable", function(args)
+    if args.bang then
+      vim.b.disable_autoformat = true -- `:FormatDisable!` -- this buffer only
+    else
+      vim.g.disable_autoformat = true
+    end
+  end, { desc = "Disable format-on-save (! for current buffer)", bang = true })
+
+  vim.api.nvim_create_user_command("FormatEnable", function()
+    vim.b.disable_autoformat = false
+    vim.g.disable_autoformat = false
+  end, { desc = "Re-enable format-on-save" })
 end
 
 -- ============================================================
