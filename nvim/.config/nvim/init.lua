@@ -502,6 +502,39 @@ do
     end,
   })
 
+  -- A Python project that configures its own type checker owns its types.
+  -- (Otherwise, we'll fall back to pyright for type checking.)
+  local python_type_checker_markers = {
+    { "mypy.ini" },
+    { ".mypy.ini" },
+    { "ty.toml" },
+    { "setup.cfg", "^%[mypy%]" },
+    { "pyproject.toml", "^%[tool%.mypy%]" },
+    { "pyproject.toml", "^%[tool%.ty%]" },
+  }
+
+  -- Whether `dir` itself configures a Python type checker (dir is the directory
+  -- containing the python venv)
+  ---@param dir string
+  ---@return boolean
+  local function configures_type_checker(dir)
+    for _, marker in ipairs(python_type_checker_markers) do
+      local name, pattern = marker[1], marker[2]
+      local path = dir .. "/" .. name
+      if vim.uv.fs_stat(path) then
+        if not pattern then
+          return true
+        end
+        for _, line in ipairs(vim.fn.readfile(path)) do
+          if line:match(pattern) then
+            return true
+          end
+        end
+      end
+    end
+    return false
+  end
+
   -- Enabled LSPs
   ---@type table<string, vim.lsp.Config>
   local servers = {
@@ -538,12 +571,27 @@ do
         -- root_dir is nil for a standalone file opened outside any project,
         -- and vim.fs.root throws rather than returning nil on a nil argument.
         local root = client.config.root_dir
-        local venv = root and vim.fs.root(root, ".venv")
-        local python = venv and (venv .. "/.venv/bin/python")
-        if python and vim.uv.fs_stat(python) then
-          client.settings = vim.tbl_deep_extend("force", client.settings or {}, {
-            python = { pythonPath = python },
-          })
+        if not root then
+          return
+        end
+
+        ---@type table<string, any>
+        local python = {}
+
+        local venv = vim.fs.root(root, ".venv")
+        local interpreter = venv and (venv .. "/.venv/bin/python")
+        if interpreter and vim.uv.fs_stat(interpreter) then
+          python.pythonPath = interpreter
+        end
+
+        -- Where a type checker is configured, pyright does not handle types
+        if configures_type_checker(root) then
+          python.analysis = { typeCheckingMode = "off" }
+        end
+
+        if not vim.tbl_isempty(python) then
+          client.settings =
+            vim.tbl_deep_extend("force", client.settings or {}, { python = python })
           client:notify("workspace/didChangeConfiguration", { settings = nil })
         end
       end,
