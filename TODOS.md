@@ -19,3 +19,9 @@ commit message. When an item is done, delete it rather than marking it done.
   `~/.claude/skills`, per the open question in ADR 0017
 - Investigate `delta` display configuration options
 - Redesign the tmux status bar and window list against the chosen palette
+
+## Neovim
+
+- Tinker with the status line
+- Set up linting in nvim, and decide between mypy, pyright, and ruff for Python
+  diagnostics
