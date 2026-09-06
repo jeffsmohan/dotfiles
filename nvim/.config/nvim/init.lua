@@ -508,7 +508,18 @@ do
     -- Web/TypeScript
     vtsls = {},
     eslint = {},
-    tailwindcss = {},
+    tailwindcss = {
+      -- By default, tailwind attaches on any filetype that can embed html/css,
+      -- which is LOTS (think php, markdown, etc.) that I generally don't want
+      filetypes = {
+        "css",
+        "html",
+        "javascript",
+        "javascriptreact",
+        "typescript",
+        "typescriptreact",
+      },
+    },
     cssls = {},
 
     -- Config and markup
