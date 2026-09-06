@@ -300,6 +300,30 @@ do
   end
 end
 
+-- PLUGIN: nvim-tree (file explorer sidebar)
+do
+  -- nvim-tree wants netrw gone
+  vim.g.loaded_netrw = 1
+  vim.g.loaded_netrwPlugin = 1
+
+  vim.pack.add({ gh("nvim-tree/nvim-tree.lua") })
+  require("nvim-tree").setup({
+    -- Move the cursor to the current buffer's file whenever you switch.
+    update_focused_file = { enable = true },
+    modified = { enable = true },
+    diagnostics = { enable = true },
+    git = { enable = true },
+    renderer = { highlight_git = "name", highlight_diagnostics = "name" },
+  })
+
+  vim.keymap.set(
+    "n",
+    "<leader>e",
+    "<cmd>NvimTreeToggle<CR>",
+    { desc = "File [E]xplorer" }
+  )
+end
+
 -- PLUGIN: telescope (search/fuzzy find)
 do
   vim.pack.add({
