@@ -701,16 +701,45 @@ do
     },
   })
 
+  -- Generally only want format-on-save when the formatter can auto-discover
+  -- a proactively defined config. (Otherwise, multiple devs editing the same
+  -- file in a repo might thrash on formatting.) The exceptions are formatters
+  -- whose default is the whole convention: fish_indent has no config and no
+  -- rival, ruff's defaults are black's.
+  -- Manually triggered formatting is always available.
+  local taplo_config = { ".taplo.toml", "taplo.toml" }
+  local function find_stylua_config(_, ctx)
+    local realpath = vim.uv.fs_realpath(ctx.filename) or ctx.filename
+    return vim.fs.root(vim.fs.dirname(realpath), { ".stylua.toml", "stylua.toml" })
+  end
+  local find_prettier_config = require("conform.formatters.prettierd").cwd
+
+  local config_required_on_save = {
+    markdown = find_prettier_config,
+    yaml = find_prettier_config,
+    json = find_prettier_config,
+    jsonc = find_prettier_config,
+    lua = find_stylua_config,
+    -- taplo reads neither .editorconfig nor any other shared convention
+    toml = function(_, ctx)
+      return vim.fs.root(ctx.dirname, taplo_config)
+    end,
+  }
+
   require("conform").setup({
     notify_on_error = false,
 
-    -- Format on save everywhere. The formatters below use the
-    -- project's own CLI tools, so each one discovers the repo's config on its
-    -- own (.stylua.toml, [tool.ruff], .prettierrc, .editorconfig). Where a repo
-    -- has no opinion, we format using the tool's defaults.
     format_on_save = function(bufnr)
       if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
         return nil
+      end
+      local find_config = config_required_on_save[vim.bo[bufnr].filetype]
+      if find_config then
+        local filename = vim.api.nvim_buf_get_name(bufnr)
+        local ctx = { filename = filename, dirname = vim.fs.dirname(filename) }
+        if not find_config(nil, ctx) then
+          return nil
+        end
       end
       return { timeout_ms = 1000 }
     end,
@@ -739,16 +768,9 @@ do
       markdown = { "prettier" },
     },
     formatters = {
-      -- StyLua looks for `.stylua.toml` upward from the buffer's directory, but
-      -- this file is reached through a stow symlink, so that search starts in
-      -- ~/.config/nvim and never reaches the dotfiles repo. Resolve the symlink
-      -- first so the repo's config wins. Elsewhere this returns nil and StyLua
-      -- runs with its own defaults, which is the behaviour we want.
-      stylua = {
-        cwd = function(_, ctx)
-          local realpath = vim.uv.fs_realpath(ctx.filename) or ctx.filename
-          return vim.fs.root(vim.fs.dirname(realpath), { ".stylua.toml", "stylua.toml" })
-        end,
+      stylua = { cwd = find_stylua_config },
+      taplo = {
+        cwd = require("conform.util").root_file(taplo_config),
       },
       -- Prefer the project's own ruff over Mason's
       ruff_format = {
