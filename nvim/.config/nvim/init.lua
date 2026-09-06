@@ -55,7 +55,6 @@ do
   vim.o.inccommand = "split"
 
   -- Windows/UI
-  vim.g.have_nerd_font = true
   vim.o.splitright = true
   vim.o.splitbelow = true
   vim.o.winborder = "rounded"
@@ -118,7 +117,7 @@ do
 
   vim.api.nvim_create_autocmd("TextYankPost", {
     desc = "Highlight when yanking text",
-    group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
+    group = vim.api.nvim_create_augroup("highlight-yank", { clear = true }),
     callback = function()
       vim.hl.on_yank()
     end,
@@ -252,7 +251,7 @@ do
   require("which-key").setup({
     delay = 500,
     preset = "modern",
-    icons = { mappings = vim.g.have_nerd_font },
+    icons = { mappings = true },
     spec = {
       { "<leader>s", group = "[S]earch", mode = { "n", "v" } },
       { "<leader>g", group = "[G]it" },
@@ -452,7 +451,7 @@ end
 do
   -- Turn LSP keymaps/features on/off when attaching
   vim.api.nvim_create_autocmd("LspAttach", {
-    group = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true }),
+    group = vim.api.nvim_create_augroup("lsp-attach", { clear = true }),
     callback = function(event)
       local map = function(keys, func, desc, mode)
         mode = mode or "n"
@@ -469,7 +468,7 @@ do
         client and client:supports_method("textDocument/documentHighlight", event.buf)
       then
         local highlight_augroup =
-          vim.api.nvim_create_augroup("kickstart-lsp-highlight", { clear = false })
+          vim.api.nvim_create_augroup("lsp-highlight", { clear = false })
         vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
           buffer = event.buf,
           group = highlight_augroup,
@@ -481,11 +480,11 @@ do
           callback = vim.lsp.buf.clear_references,
         })
         vim.api.nvim_create_autocmd("LspDetach", {
-          group = vim.api.nvim_create_augroup("kickstart-lsp-detach", { clear = true }),
+          group = vim.api.nvim_create_augroup("lsp-detach", { clear = true }),
           callback = function(event2)
             vim.lsp.buf.clear_references()
             vim.api.nvim_clear_autocmds({
-              group = "kickstart-lsp-highlight",
+              group = "lsp-highlight",
               buffer = event2.buf,
             })
           end,
