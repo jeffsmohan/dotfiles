@@ -24,5 +24,3 @@ commit message. When an item is done, delete it rather than marking it done.
 ## Neovim
 
 - Tinker with the status line
-- Set up linting in nvim, and decide between mypy, pyright, and ruff for Python
-  diagnostics

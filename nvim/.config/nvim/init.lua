@@ -3,6 +3,38 @@ local function gh(repo)
   return "https://github.com/" .. repo
 end
 
+-- Whether `dir` itself configures a Python type checker (dir is the directory
+-- containing the python venv).
+---@param dir string
+---@return boolean
+local function configures_python_type_checker(dir)
+  -- A Python project that configures its own type checker owns its types.
+  -- (Otherwise, we'll fall back to pyright for type checking.)
+  local python_type_checker_markers = {
+    { file = "mypy.ini" },
+    { file = ".mypy.ini" },
+    { file = "ty.toml" },
+    { file = "setup.cfg", patterns = { "^%[mypy%]" } },
+    { file = "pyproject.toml", patterns = { "^%[tool%.mypy%]", "^%[tool%.ty%]" } },
+  }
+  for _, marker in ipairs(python_type_checker_markers) do
+    local path = dir .. "/" .. marker.file
+    if vim.uv.fs_stat(path) then
+      if not marker.patterns then
+        return true
+      end
+      for _, line in ipairs(vim.fn.readfile(path)) do
+        for _, pattern in ipairs(marker.patterns) do
+          if line:match(pattern) then
+            return true
+          end
+        end
+      end
+    end
+  end
+  return false
+end
+
 -- OPTIONS: Core nvim settings, leaders, options
 do
   vim.loader.enable() -- Cache compiled Lua modules
@@ -502,39 +534,6 @@ do
     end,
   })
 
-  -- A Python project that configures its own type checker owns its types.
-  -- (Otherwise, we'll fall back to pyright for type checking.)
-  local python_type_checker_markers = {
-    { "mypy.ini" },
-    { ".mypy.ini" },
-    { "ty.toml" },
-    { "setup.cfg", "^%[mypy%]" },
-    { "pyproject.toml", "^%[tool%.mypy%]" },
-    { "pyproject.toml", "^%[tool%.ty%]" },
-  }
-
-  -- Whether `dir` itself configures a Python type checker (dir is the directory
-  -- containing the python venv)
-  ---@param dir string
-  ---@return boolean
-  local function configures_type_checker(dir)
-    for _, marker in ipairs(python_type_checker_markers) do
-      local name, pattern = marker[1], marker[2]
-      local path = dir .. "/" .. name
-      if vim.uv.fs_stat(path) then
-        if not pattern then
-          return true
-        end
-        for _, line in ipairs(vim.fn.readfile(path)) do
-          if line:match(pattern) then
-            return true
-          end
-        end
-      end
-    end
-    return false
-  end
-
   -- Enabled LSPs
   ---@type table<string, vim.lsp.Config>
   local servers = {
@@ -585,7 +584,7 @@ do
         end
 
         -- Where a type checker is configured, pyright does not handle types
-        if configures_type_checker(root) then
+        if configures_python_type_checker(root) then
           python.analysis = { typeCheckingMode = "off" }
         end
 
@@ -653,6 +652,36 @@ do
     vim.lsp.config(name, server)
     vim.lsp.enable(name)
   end
+end
+
+-- TYPE CHECKING: mypy on save
+do
+  vim.pack.add({ gh("mfussenegger/nvim-lint") })
+  local lint = require("lint")
+
+  -- nvim-lint's built-in mypy linter parses the output and, because its pattern
+  -- captures a `file` group, already drops diagnostics belonging to other files.
+  -- mypy follows imports, so without that a break elsewhere would be reported
+  -- against whatever line it fell on in this buffer.
+  vim.api.nvim_create_autocmd("BufWritePost", {
+    desc = "Type check with the project's own mypy",
+    group = vim.api.nvim_create_augroup("mypy-on-save", { clear = true }),
+    pattern = "*.py",
+    callback = function(event)
+      -- The root pyright picked for this buffer; reusing it keeps the two in agreement
+      local client = vim.lsp.get_clients({ bufnr = event.buf, name = "pyright" })[1]
+      local root = client and client.config.root_dir
+      if not root or not configures_python_type_checker(root) then
+        return
+      end
+      local mypy = root .. "/.venv/bin/mypy"
+      if not vim.uv.fs_stat(mypy) then
+        return
+      end
+      lint.linters.mypy.cmd = mypy
+      lint.try_lint("mypy", { cwd = root })
+    end,
+  })
 end
 
 -- FORMATTING: conform.nvim
