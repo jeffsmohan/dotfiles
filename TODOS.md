@@ -20,3 +20,9 @@ commit message. When an item is done, delete it rather than marking it done.
 - Investigate `delta` display configuration options
 - Redesign the tmux status bar and window list against the chosen palette
 - Investigate `vim-tmux-navigator` for unified pane/split movement across nvim and tmux
+
+## Neovim
+
+- Tinker with the status line
+- Set up linting in nvim, and decide between mypy, pyright, and ruff for Python
+  diagnostics
