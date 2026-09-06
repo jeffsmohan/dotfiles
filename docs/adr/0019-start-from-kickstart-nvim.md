@@ -33,6 +33,12 @@ kickstart has already done and documented.
 ## More Information
 
 Plugins are managed by `vim.pack`, Neovim's built-in package manager and kickstart's own
-choice. Its lockfile lives at `$XDG_CONFIG_HOME/nvim/nvim-pack-lock.json` and is
-deliberately untracked, with no `.gitignore` rule involved: `--no-folding` symlinks only
-`init.lua`, so everything else in `~/.config/nvim/` sits outside this repo.
+choice. Its lockfile is stowed alongside `init.lua`, so `vim.pack` writes plugin revisions
+straight into this repo. It records only `rev`, `src` and `version` — nothing
+machine-specific — and pinning them means a new machine gets this editor rather than
+whatever each plugin's HEAD happens to be that day. Updating plugins therefore dirties the
+worktree, which is what a lockfile is for.
+
+Stow cannot place the symlink if `~/.config/nvim/nvim-pack-lock.json` already exists as a
+real file, which is what running Neovim before `bootstrap.sh` leaves behind. Delete it and
+re-stow; the repo's copy is the authority.
