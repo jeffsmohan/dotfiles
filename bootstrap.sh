@@ -71,6 +71,24 @@ set_login_shell() {
   fi
 }
 
+# Claude Code app owns and frequently writes ~/.claude/settings.json
+# (whenever you change model or effort, for example).
+# Since the dotfiles can't own it fully and stow it, we'll merge our base settings.
+merge_claude_settings() {
+  local base="$repo_root/claude/settings-base.json"
+  local live="$HOME/.claude/settings.json"
+  local tmp
+
+  mkdir -p "$(dirname "$live")"
+  [[ -f "$live" ]] || echo '{}' >"$live"
+
+  # Right-hand side wins, so the tracked wiring overrides a stale value in place.
+  tmp="$(mktemp)"
+  jq -s '.[0] * .[1]' "$live" "$base" >"$tmp"
+  mv "$tmp" "$live"
+  echo "Merged $(basename "$base") into $live"
+}
+
 # === Bootstrap steps ===
 
 say "Homebrew"
@@ -105,6 +123,9 @@ echo "Stowing: ${packages[*]}"
 if ! stow --restow "${packages[@]}"; then
   die "Stow changed nothing. Move the file it named above aside, then re-run."
 fi
+
+say "Claude Code settings"
+merge_claude_settings
 
 say "Git hooks"
 pre-commit install

@@ -1,5 +1,5 @@
 ---
-status: accepted
+status: partially superseded by 0024
 date: 2026-08-21
 ---
 
