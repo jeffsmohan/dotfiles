@@ -27,8 +27,21 @@
 	navigate = true
 	line-numbers = true
 	hyperlinks = true
-	# ANSI slots, not hex, so diffs follow Ghostty's theme like everything else.
+	side-by-side = true
 	syntax-theme = base16
+	wrap-max-lines = 10 # Show most content; truncate for super-long autogen stuff
+	file-style = bold brightwhite
+	file-decoration-style = brightwhite ul
+	hunk-header-style = file line-number syntax
+	hunk-header-file-style = blue ul
+	hunk-header-line-number-style = blue ul
+	# No padding option, so a rule is the only way to get a gap under hunk header
+	hunk-header-decoration-style = 18 ul
+	merge-conflict-ours-diff-header-decoration-style = blue ul
+	merge-conflict-theirs-diff-header-decoration-style = blue ul
+	line-numbers-left-style = brightblack
+	line-numbers-right-style = brightblack
+	line-numbers-zero-style = brightblack
 
 [diff]
 	algorithm = histogram
