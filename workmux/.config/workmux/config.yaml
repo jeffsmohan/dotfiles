@@ -6,6 +6,7 @@ mode: window # A session is a repo, a window is a worktree, panes are roles with
 worktree_dir: ~/code/.worktrees/{project}
 base_branch: auto # Branch from repo's main branch instead of current branch
 merge_strategy: rebase
+window_placement: rightmost
 panes: # Left pane agent; right pane shell
   - command: <agent>
     focus: true
@@ -16,12 +17,10 @@ nerdfont: true
 
 # tmux.conf owns window-status-format
 status_format: false
-
-# Nerdfonts use the color of the window title (vs the emojis having their own color)
 status_icons:
   working: "" # oct-dot_fill
-  waiting: "" # oct-comment
-  done: "" # oct-check
+  waiting: "#[fg=brightyellow]#[default]" # oct-comment
+  done: "#[fg=brightgreen]#[default]" # oct-check
 window_prefix: ""
 
 # The dashboard picks from twelve of its own schemes and takes no palette input
