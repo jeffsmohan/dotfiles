@@ -17,7 +17,3 @@ commit message. When an item is done, delete it rather than marking it done.
   `user.signingkey`
 - Decide whether to own and customise the skills `workmux setup` installs into
   `~/.claude/skills`, per the open question in ADR 0017
-
-## Neovim
-
-- Tinker with the status line

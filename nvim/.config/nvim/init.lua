@@ -52,6 +52,7 @@ do
   vim.o.sidescrolloff = 10
   vim.o.mouse = "a" -- all modes
   vim.o.showmode = false -- displayed in status line instead
+  vim.o.laststatus = 3 -- one status line for the tab page, not one per window
   vim.o.undofile = true
 
   -- Timing/behaviors
@@ -90,6 +91,24 @@ do
   vim.o.splitright = true
   vim.o.splitbelow = true
   vim.o.winborder = "rounded"
+
+  -- Cursor line only in the focused window (indicates active window)
+  local cursorline_group =
+    vim.api.nvim_create_augroup("cursorline-follows-focus", { clear = true })
+  vim.api.nvim_create_autocmd({ "WinEnter", "BufWinEnter" }, {
+    desc = "Show the cursor line in the focused window",
+    group = cursorline_group,
+    callback = function()
+      vim.wo.cursorline = true
+    end,
+  })
+  vim.api.nvim_create_autocmd("WinLeave", {
+    desc = "Hide the cursor line in unfocused windows",
+    group = cursorline_group,
+    callback = function()
+      vim.wo.cursorline = false
+    end,
+  })
 end
 
 -- KEYMAPS: basic mappings
@@ -201,6 +220,32 @@ end
 do
   -- Terminal palette isn't rich enough an editor, so use the full vim theme
   vim.pack.add({ gh("rebelot/kanagawa.nvim") })
+
+  require("kanagawa").setup({
+    overrides = function(colors)
+      -- Custom coloring of status line segments
+      local p = colors.palette
+      local band = p.sumiInk5
+      return {
+        -- Make the window separation line read clearer
+        WinSeparator = { fg = p.sumiInk6 },
+        -- Status line segments
+        StatusLineBase = { fg = p.oldWhite, bg = band },
+        StatusLineDim = { fg = p.fujiGray, bg = band },
+        StatusLineFile = { fg = p.fujiWhite, bg = band, bold = true },
+        StatusLineBranch = { fg = p.springGreen, bg = band },
+        StatusLineModified = { fg = p.roninYellow, bg = band },
+        StatusLineReadonly = { fg = p.samuraiRed, bg = band },
+        StatusLineAlert = { fg = p.samuraiRed, bg = band, bold = true },
+        StatusLineNotice = { fg = p.surimiOrange, bg = band },
+        StatusLineError = { fg = p.samuraiRed, bg = band, bold = true },
+        StatusLineWarn = { fg = p.roninYellow, bg = band, bold = true },
+        StatusLineInfo = { fg = p.dragonBlue, bg = band },
+        StatusLineHint = { fg = p.waveAqua1, bg = band },
+      }
+    end,
+  })
+
   vim.cmd.colorscheme("kanagawa-wave")
 end
 
@@ -322,13 +367,127 @@ do
     },
     n_lines = 500,
   })
+end
+
+-- STATUS LINE: mini.statusline
+do
+  -- Custom status line:
+  -- - Left half is ~identity (mode, branch, directory, file)
+  -- - Right half is ~transient/warnings (diagnostics/errors, recording macro)
+  -- - Prefer auto-hide segments where possible (only show when useful/alerting)
 
   local statusline = require("mini.statusline")
-  statusline.setup({ use_icons = true })
-  ---@diagnostic disable-next-line: duplicate-set-field
-  statusline.section_location = function()
-    return "%2l:%-2v"
+  local icons = {
+    branch = "", -- oct-git_branch
+    folder = "", -- fa-folder
+    readonly = "", -- fa-lock
+    modified = "●",
+  }
+  local diagnostic_signs = {
+    ERROR = "%#StatusLineError#E",
+    WARN = "%#StatusLineWarn#W",
+    INFO = "%#StatusLineInfo#I",
+    HINT = "%#StatusLineHint#H",
+  }
+
+  local function diagnostics()
+    return vim.trim(
+      statusline.section_diagnostics({ icon = "", signs = diagnostic_signs })
+    )
   end
+
+  local function section_path()
+    if vim.bo.buftype == "terminal" then
+      return "%t"
+    end
+    local name = vim.api.nvim_buf_get_name(0)
+    if name == "" then
+      return icons.folder .. " %#StatusLineFile#[No Name]"
+    end
+
+    local relative = vim.fn.fnamemodify(name, ":~:.") -- relative to git by default
+    local dir = vim.fn.fnamemodify(relative, ":h")
+    local file = vim.fn.fnamemodify(relative, ":t")
+
+    local flags = {}
+    if vim.bo.modified then
+      table.insert(flags, "%#StatusLineModified#" .. icons.modified)
+    end
+    if vim.bo.readonly or not vim.bo.modifiable then
+      table.insert(flags, "%#StatusLineReadonly#" .. icons.readonly)
+    end
+
+    return table.concat({
+      icons.folder,
+      " ",
+      dir == "." and "" or dir .. "/",
+      "%#StatusLineFile#",
+      file,
+      #flags > 0 and " " or "",
+      table.concat(flags, " "),
+    })
+  end
+
+  -- `q` is easy to hit by accident, and recording is otherwise silent
+  local function section_macro()
+    local register = vim.fn.reg_recording()
+    return register == "" and "" or "REC @" .. register
+  end
+
+  -- Whether format-on-save is active is otherwise hard to tell
+  local function section_autoformat()
+    local disabled = vim.g.disable_autoformat or vim.b.disable_autoformat
+    return disabled and "no-fmt" or ""
+  end
+
+  local function section_encoding()
+    local parts = {}
+    local encoding = vim.bo.fileencoding
+    if encoding ~= "" and encoding ~= "utf-8" then
+      table.insert(parts, encoding)
+    end
+    if vim.bo.fileformat ~= "unix" then
+      table.insert(parts, "[" .. vim.bo.fileformat .. "]")
+    end
+    return table.concat(parts)
+  end
+
+  statusline.setup({
+    use_icons = true,
+    content = {
+      -- No `inactive`: laststatus=3 means only the active content is ever drawn.
+      active = function()
+        local mode, mode_hl = statusline.section_mode({ trunc_width = 0 })
+        return statusline.combine_groups({
+          { hl = mode_hl, strings = { mode:upper() } },
+          {
+            hl = "StatusLineBranch",
+            strings = { statusline.section_git({ icon = icons.branch }) },
+          },
+          -- Borrow gitsigns formatted hunks (vs mini's diff section, which renders "-"
+          -- for no changes)
+          { hl = "StatusLineDim", strings = { vim.b.gitsigns_status } },
+          "%<", -- shorten the path before anything to its right
+          { hl = "StatusLineDim", strings = { section_path() } },
+          "%=",
+          { hl = "StatusLineAlert", strings = { section_macro() } },
+          {
+            hl = "StatusLineNotice",
+            strings = { section_autoformat(), section_encoding() },
+          },
+          { hl = "StatusLineBase", strings = { diagnostics() } },
+          { hl = "StatusLineBase", strings = { statusline.section_searchcount({}) } },
+          -- Short form: filetype and icon, without the encoding, line ending and
+          -- size the long form adds
+          {
+            hl = "StatusLineBase",
+            strings = { statusline.section_fileinfo({ trunc_width = math.huge }) },
+          },
+          { hl = "StatusLineBase", strings = { "%2l:%-2v" } },
+        })
+      end,
+    },
+  })
 end
 
 -- PLUGIN: nvim-tree (file explorer sidebar)
