@@ -5,12 +5,11 @@
 # candidate pool. Only neovim needs a matching edit, in its own colourscheme.
 #
 # Slot 18 is the chrome band: the tmux status bar and the starship prompt both need a
-# shade one step off the background, and the 16 slots have none. base24 assigns that
-# role to slot 18 ("lighter background, used for status bars"), so this follows the
-# spec rather than inventing a slot. It also serves as the ink on the accent blocks
-# in both. The value is Kanagawa's own next-background-up (sumiInk3), not derived.
+# shade off the background, and the 16 slots have none. base24 assigns that role to
+# slot 18 ("lighter background, used for status bars"), so this follows the spec
+# rather than inventing a slot. The value is Kanagawa's own sumiInk5.
 theme = Kanagawa Wave
-palette = 18=#2a2a37
+palette = 18=#363646
 font-family = "FiraMono Nerd Font Mono"
 font-size = 12
 

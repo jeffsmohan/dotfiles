@@ -18,7 +18,6 @@ commit message. When an item is done, delete it rather than marking it done.
 - Decide whether to own and customise the skills `workmux setup` installs into
   `~/.claude/skills`, per the open question in ADR 0017
 - Investigate `delta` display configuration options
-- Redesign the tmux status bar and window list against the chosen palette
 - Investigate `vim-tmux-navigator` for unified pane/split movement across nvim and tmux
 
 ## Neovim
