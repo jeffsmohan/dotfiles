@@ -20,6 +20,7 @@ macos-titlebar-style = hidden
 # Behavior
 window-inherit-font-size = false
 macos-option-as-alt = true
+mouse-hide-while-typing = true
 
 # send Ctrl+Shift+Arrow (Mac tab-switching, also built as keyboard chords) through as
 # special escape sequences that tmux.conf binds to window-switching
