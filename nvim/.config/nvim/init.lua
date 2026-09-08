@@ -305,6 +305,19 @@ do
   })
 end
 
+-- PLUGIN: gitlinker (shareable permalinks)
+do
+  vim.pack.add({ gh("linrongbin16/gitlinker.nvim") })
+  require("gitlinker").setup({})
+
+  vim.keymap.set({ "n", "v" }, "<leader>gl", "<cmd>GitLink<CR>", {
+    desc = "[G]it [L]ink (copy)",
+  })
+  vim.keymap.set({ "n", "v" }, "<leader>gL", "<cmd>GitLink!<CR>", {
+    desc = "[G]it [L]ink (open in browser)",
+  })
+end
+
 -- PLUGIN: guess-indent (autodetect file indentation)
 do
   vim.pack.add({ gh("NMAC427/guess-indent.nvim") })
