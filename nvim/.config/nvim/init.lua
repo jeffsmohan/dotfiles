@@ -166,6 +166,10 @@ do
   vim.keymap.set("n", "<C-S-j>", "<C-w>J", { desc = "Move window to the lower" })
   vim.keymap.set("n", "<C-S-k>", "<C-w>K", { desc = "Move window to the upper" })
 
+  -- Up/down paging
+  vim.keymap.set("n", "<C-u>", "<C-u>zz")
+  vim.keymap.set("n", "<C-d>", "<C-d>zz")
+
   vim.api.nvim_create_autocmd("TextYankPost", {
     desc = "Highlight when yanking text",
     group = vim.api.nvim_create_augroup("highlight-yank", { clear = true }),
