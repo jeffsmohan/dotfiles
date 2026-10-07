@@ -1090,3 +1090,22 @@ do
     end,
   })
 end
+
+-- PLUGIN: render-markdown (in-buffer markdown rendering)
+do
+  vim.pack.add({
+    {
+      src = gh("MeanderingProgrammer/render-markdown.nvim"),
+      version = vim.version.range("8.*"),
+    },
+  })
+  require("render-markdown").setup({
+    injections = { gitcommit = { enabled = false } }, -- commit messages stay plain text
+    heading = { sign = false }, -- leave the sign column to gitsigns
+    latex = { enabled = false }, -- no latex parser or converter installed
+    completions = { lsp = { enabled = true } }, -- checkbox/callout completions via blink
+  })
+  vim.keymap.set("n", "<leader>tm", "<cmd>RenderMarkdown buf_toggle<CR>", {
+    desc = "[T]oggle [M]arkdown rendering",
+  })
+end
