@@ -2,6 +2,7 @@
 
 tap "raine/workmux"
 
+brew "bash"
 brew "fd"
 brew "fish"
 brew "fnm"

@@ -6,6 +6,9 @@
   "disableBundledSkills": true,
   "disableRemoteControl": true,
   "disableWorkflows": true,
+  "env": {
+    "CLAUDE_CODE_SHELL": "/opt/homebrew/bin/bash"
+  },
   "hooks": {
     "Notification": [
       {
