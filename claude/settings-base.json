@@ -64,6 +64,21 @@
     "defaultMode": "auto",
     "deny": ["EnterPlanMode", "ExitPlanMode", "AskUserQuestion"]
   },
+  "sandbox": {
+    "excludedCommands": [
+      "gh *",
+      "git fetch",
+      "git fetch *",
+      "git ls-remote *",
+      "git pull",
+      "git pull *",
+      "git push",
+      "git push *"
+    ],
+    "filesystem": {
+      "allowWrite": ["~/.cache/uv"]
+    }
+  },
   "skipAutoPermissionPrompt": true,
   "statusLine": {
     "command": "~/.claude/statusline-command.sh",
