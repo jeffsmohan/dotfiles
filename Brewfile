@@ -2,6 +2,7 @@
 
 tap "raine/workmux"
 
+brew "awscli"
 brew "bash"
 brew "fd"
 brew "fish"
