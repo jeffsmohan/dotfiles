@@ -23,6 +23,9 @@ say "Trackpad"
 defaults -currentHost write -g com.apple.mouse.tapBehavior -int 1
 defaults write com.apple.AppleMultitouchTrackpad Clicking -bool true
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
+# No swiping between pages, on trackpad or mouse
+defaults write -g AppleEnableSwipeNavigateWithScrolls -bool false
+defaults write -g AppleEnableMouseSwipeNavigateWithScrolls -bool false
 
 say "Dock"
 defaults write com.apple.dock autohide -bool true
