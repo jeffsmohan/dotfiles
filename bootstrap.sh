@@ -8,6 +8,14 @@ set -euo pipefail
 
 readonly homebrew_installer="https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
 
+# Third-party agent skills: installed, not tracked (ADR 0013). Each entry is a source
+# followed by the skills to take from it.
+readonly agent_skills=(
+  "raine/workmux coordinator merge rebase workmux worktree"
+  "yoshiko-pg/difit *"
+  "mattpocock/skills grill-me handoff retro"
+)
+
 # Stow reads .stowrc from the current directory, so run from the repo root
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$repo_root"
@@ -89,6 +97,26 @@ merge_claude_settings() {
   echo "Merged $(basename "$base") into $live"
 }
 
+# fnm installs no node of its own, and npx needs one. Default to the latest LTS, but
+# never move a default that is already set.
+ensure_default_node() {
+  if fnm exec --using=default node --version >/dev/null 2>&1; then
+    echo "Default node $(fnm exec --using=default node --version)"
+  else
+    fnm install --lts --progress never
+  fi
+}
+
+# `workmux setup --skills` refuses to run without a TTY, so both go through `skills`.
+install_agent_skills() {
+  local entry fields
+  for entry in "${agent_skills[@]}"; do
+    read -r -a fields <<<"$entry"
+    DISABLE_TELEMETRY=1 fnm exec --using=default npx --yes skills add "${fields[0]}" \
+      --global --agent claude-code --skill "${fields[@]:1}" --yes
+  done
+}
+
 # === Bootstrap steps ===
 
 say "Homebrew"
@@ -126,6 +154,12 @@ fi
 
 say "Claude Code settings"
 merge_claude_settings
+
+say "Node"
+ensure_default_node
+
+say "Agent skills"
+install_agent_skills
 
 say "Git hooks"
 pre-commit install

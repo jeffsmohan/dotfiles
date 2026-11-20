@@ -15,7 +15,5 @@ commit message. When an item is done, delete it rather than marking it done.
 - Script that automates per-machine setup, rather than the README list of manual steps:
   prompt for `user.email`, guide creating the Secretive key, register it with `gh`, set
   `user.signingkey`
-- Decide whether to own and customise the skills `workmux setup` installs into
-  `~/.claude/skills`, per the open question in ADR 0017
 - Add nvim keymaps/tooling to surface, navigate, and resolve LSP diagnostics (e.g.
   cursor-float, `[d`/`]d`)

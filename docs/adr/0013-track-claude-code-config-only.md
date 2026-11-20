@@ -27,9 +27,8 @@ state share `~/.claude` without interfering.
 transcripts that grow every session, so a forgotten entry publishes them from a public
 repo.
 
-**Skills are tracked when no installer claims them.** Any skills set up automatically
-(`npx skills add` or `workmux setup`) need not be tracked here, though their installation
-may end up in `bootstrap.sh` or other automated setup.
+**Skills are tracked when no installer claims them.** Third-party skills are installed by
+`bootstrap.sh` with `npx skills add`, not tracked here.
 
 ## More Information
 
